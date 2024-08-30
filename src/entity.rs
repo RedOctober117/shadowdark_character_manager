@@ -7,16 +7,6 @@
 use std::{fmt, usize};
 
 #[derive(Clone, Copy)]
-pub struct Stats {
-    strength: i8,
-    dexterity: i8,
-    constitution: i8,
-    intelligence: i8,
-    wisdom: i8,
-    charisma: i8,
-}
-
-#[derive(Clone, Copy)]
 pub enum StatsEnum {
     Strength = 0,
     Dexterity = 1,
@@ -53,6 +43,16 @@ impl From<usize> for StatsEnum {
     }
 }
 
+#[derive(Clone, Copy)]
+pub struct Stats {
+    strength: i8,
+    dexterity: i8,
+    constitution: i8,
+    intelligence: i8,
+    wisdom: i8,
+    charisma: i8,
+}
+
 impl Stats {
     pub fn new() -> Self {
         Self {
@@ -64,7 +64,7 @@ impl Stats {
             charisma: 0,
         }
     }
-
+    
     fn match_stat(self, stat_name: StatsEnum) -> i8 {
         match stat_name {
             StatsEnum::Strength => self.strength,
@@ -75,7 +75,7 @@ impl Stats {
             StatsEnum::Charisma => self.charisma,
         }
     }
-
+    
     fn match_stat_ref(&self, stat_name: StatsEnum) -> &i8 {
         match stat_name {
             StatsEnum::Strength => &self.strength,
@@ -131,13 +131,23 @@ impl Default for Stats {
     }
 }
 
-struct Attack {}
+struct StatModifier {
+    stat: StatsEnum,
+    value: i8,
+}
 
-struct Talent {}
+struct Attack { }
 
-struct Spell {}
+struct Talent {
+    name: Option<String>,
+    description: Option<String>,
+    modifiers: Vec<StatModifier>,
 
-struct Gear {}
+ }
+
+struct Spell { }
+
+struct Gear { }
 
 enum AlignmentEnum {
     Chaotic,
@@ -154,7 +164,28 @@ enum ClassEnum {
     Wizard,
 }
 
-struct Class {}
+enum LanguageEnum {
+    Common,
+    Dwarvish,
+    Elvish,
+    Giant,
+    Goblin,
+    Merran,
+    Orcish,
+    Reptilian,
+    Sylvan,
+    Thanian,
+    Celestial,
+    Diabloic,
+    Draconic,
+    Primordial,
+}
+
+struct Class {
+    class: ClassEnum,
+    languages: Vec<LanguageEnum>,
+    talents: Vec<Talent>,
+}
 
 enum Background {
     Urchin,
