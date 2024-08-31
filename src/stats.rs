@@ -1,5 +1,43 @@
 use core::{fmt, };
 
+#[derive(Clone, Debug)]
+pub struct Trait<T> {
+    id: u8,
+    name: String,
+    description: Option<String>,
+    value: T,
+}
+
+impl<T> Trait<T> {
+    pub fn new(value: T, id_counter: &mut u8) -> Self {
+        let new = Self {
+            id: *id_counter,
+            name: String::new(),
+            description: None,
+            value,
+        };
+        *id_counter += 1;
+        new
+    }
+
+    pub fn get_value(self) -> T {
+        self.value
+    }
+
+    pub fn get_value_ref(&self) -> &T {
+        &self.value
+    }
+
+    pub fn get_value_mut(&mut self) -> &mut T {
+        &mut self.value
+    }
+}
+
+pub struct TraitModifier<T> {
+    trait_id: u8,
+    value: T,
+}
+
 #[derive(Clone, Copy)]
 pub enum StatsEnum {
     Strength = 0,
@@ -37,82 +75,77 @@ impl From<usize> for StatsEnum {
     }
 }
 
-#[derive(Copy, Clone)]
-pub struct Stat<T> {
-    id: u8,
-    stat_enum: Option<StatsEnum>,
-    value: Option<T>,
-}
+// #[derive(Copy, Clone)]
+// pub struct Stat<T> {
+//     id: u8,
+//     stat_enum: Option<StatsEnum>,
+//     value: Option<T>,
+// }
 
-impl<T> Stat<T> {
-    pub fn new(id_count: &mut u8) -> Self {
-        let new = Self {
-            id: *id_count,
-            stat_enum: None,
-            value: None,            
-        };
-        *id_count += 1;
-        new
-    }
-}
+// impl<T> Stat<T> {
+//     pub fn new(id_count: &mut u8) -> Self {
+//         let new = Self {
+//             id: *id_count,
+//             stat_enum: None,
+//             value: None,            
+//         };
+//         *id_count += 1;
+//         new
+//     }
+// }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct PlayerStats {
-    strength: Stat<u8>,
-    dexterity: Stat<u8>,
-    constitution: Stat<u8>,
-    intelligence: Stat<u8>,
-    wisdom: Stat<u8>,
-    charisma: Stat<u8>,
-    hp: Stat<u8>,
-    xp: Stat<u32>,
+    strength: Trait<u8>,
+    dexterity: Trait<u8>,
+    constitution: Trait<u8>,
+    intelligence: Trait<u8>,
+    wisdom: Trait<u8>,
+    charisma: Trait<u8>,
 }
 
 impl PlayerStats {
     pub fn new(id_counter: &mut u8) -> Self {
         Self {
-            strength: Stat::new(id_counter),
-            dexterity: Stat::new(id_counter),
-            constitution: Stat::new(id_counter),
-            intelligence: Stat::new(id_counter),
-            wisdom: Stat::new(id_counter),
-            charisma: Stat::new(id_counter),
-            
-            hp: Stat::new(id_counter),
-            xp: Stat::new(id_counter),
+            strength: Trait::new(1, id_counter),
+            dexterity: Trait::new(1, id_counter),
+            constitution: Trait::new(1, id_counter),
+            intelligence: Trait::new(1, id_counter),
+            wisdom: Trait::new(1, id_counter),
+            charisma: Trait::new(1, id_counter),
         }
     }
     
     fn match_stat(self, stat_name: StatsEnum) -> u8 {
         match stat_name {
-            StatsEnum::Strength => self.strength,
-            StatsEnum::Dexterity => self.dexterity,
-            StatsEnum::Constitution => self.constitution,
-            StatsEnum::Intelligence => self.intelligence,
-            StatsEnum::Wisdom => self.wisdom,
-            StatsEnum::Charisma => self.charisma,
+            StatsEnum::Strength => self.strength.get_value(),
+            StatsEnum::Dexterity => self.dexterity.get_value(),
+            StatsEnum::Constitution => self.constitution.get_value(),
+            StatsEnum::Intelligence => self.intelligence.get_value(),
+            StatsEnum::Wisdom => self.wisdom.get_value(),
+            StatsEnum::Charisma => self.charisma.get_value(),
         }
     }
     
     fn match_stat_ref(&self, stat_name: StatsEnum) -> &u8 {
         match stat_name {
-            StatsEnum::Strength => &self.strength,
-            StatsEnum::Dexterity => &self.dexterity,
-            StatsEnum::Constitution => &self.constitution,
-            StatsEnum::Intelligence => &self.intelligence,
-            StatsEnum::Wisdom => &self.wisdom,
-            StatsEnum::Charisma => &self.charisma,
+            StatsEnum::Strength => &self.strength.get_value_ref(),
+            StatsEnum::Dexterity => &self.dexterity.get_value_ref(),
+            StatsEnum::Constitution => &self.constitution.get_value_ref(),
+            StatsEnum::Intelligence => &self.intelligence.get_value_ref(),
+            StatsEnum::Wisdom => &self.wisdom.get_value_ref(),
+            StatsEnum::Charisma => &self.charisma.get_value_ref(),
         }
     }
 
     fn match_stat_mut(&mut self, stat_name: StatsEnum) -> &mut u8 {
         match stat_name {
-            StatsEnum::Strength => &mut self.strength,
-            StatsEnum::Dexterity => &mut self.dexterity,
-            StatsEnum::Constitution => &mut self.constitution,
-            StatsEnum::Intelligence => &mut self.intelligence,
-            StatsEnum::Wisdom => &mut self.wisdom,
-            StatsEnum::Charisma => &mut self.charisma,
+            StatsEnum::Strength => self.strength.get_value_mut(),
+            StatsEnum::Dexterity => self.dexterity.get_value_mut(),
+            StatsEnum::Constitution => self.constitution.get_value_mut(),
+            StatsEnum::Intelligence => self.intelligence.get_value_mut(),
+            StatsEnum::Wisdom => self.wisdom.get_value_mut(),
+            StatsEnum::Charisma => self.charisma.get_value_mut(),
         }
     }
 
@@ -145,7 +178,8 @@ impl PlayerStats {
 
 impl Default for PlayerStats {
     fn default() -> Self {
-        Self::new()
+        todo!()
+        // Self::new()
     }
 }
 
