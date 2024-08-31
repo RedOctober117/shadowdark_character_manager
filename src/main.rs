@@ -1,9 +1,10 @@
 #![allow(dead_code)]
 
-use crate::entity::*;
+use crate::{stats::*, entity::*, talent::*};
 
+pub mod stats;
 pub mod entity;
-
+pub mod talent;
 
 fn main() {
     let mut stat_block = Stats::new();
