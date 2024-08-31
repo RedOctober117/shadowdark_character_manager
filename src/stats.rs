@@ -37,25 +37,49 @@ impl From<usize> for StatsEnum {
     }
 }
 
-#[derive(Clone, Copy)]
-pub struct Stats {
-    strength: u8,
-    dexterity: u8,
-    constitution: u8,
-    intelligence: u8,
-    wisdom: u8,
-    charisma: u8,
+#[derive(Copy, Clone)]
+pub struct Stat<T> {
+    id: u8,
+    stat_enum: Option<StatsEnum>,
+    value: Option<T>,
 }
 
-impl Stats {
-    pub fn new() -> Self {
+impl<T> Stat<T> {
+    pub fn new(id_count: &mut u8) -> Self {
+        let new = Self {
+            id: *id_count,
+            stat_enum: None,
+            value: None,            
+        };
+        *id_count += 1;
+        new
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct PlayerStats {
+    strength: Stat<u8>,
+    dexterity: Stat<u8>,
+    constitution: Stat<u8>,
+    intelligence: Stat<u8>,
+    wisdom: Stat<u8>,
+    charisma: Stat<u8>,
+    hp: Stat<u8>,
+    xp: Stat<u32>,
+}
+
+impl PlayerStats {
+    pub fn new(id_counter: &mut u8) -> Self {
         Self {
-            strength: 1,
-            dexterity: 1,
-            constitution: 1,
-            intelligence: 1,
-            wisdom: 1,
-            charisma: 1,
+            strength: Stat::new(id_counter),
+            dexterity: Stat::new(id_counter),
+            constitution: Stat::new(id_counter),
+            intelligence: Stat::new(id_counter),
+            wisdom: Stat::new(id_counter),
+            charisma: Stat::new(id_counter),
+            
+            hp: Stat::new(id_counter),
+            xp: Stat::new(id_counter),
         }
     }
     
@@ -119,7 +143,7 @@ impl Stats {
 //     }
 // }
 
-impl Default for Stats {
+impl Default for PlayerStats {
     fn default() -> Self {
         Self::new()
     }

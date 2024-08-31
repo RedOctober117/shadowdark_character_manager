@@ -10,7 +10,7 @@ struct Entity {
     name: String,
     ancestry: AncestryEnum,
     background: Background,
-    stats: Stats,
+    stats: PlayerStats,
     class: Class,
     level: i16,
     xp: f32,

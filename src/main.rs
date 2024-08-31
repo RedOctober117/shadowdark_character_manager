@@ -7,7 +7,7 @@ pub mod entity;
 pub mod talent;
 
 fn main() {
-    let mut stat_block = Stats::new();
+    let mut stat_block = PlayerStats::new();
 
     println!("str: {}", stat_block.get_stat(StatsEnum::Strength));
 
