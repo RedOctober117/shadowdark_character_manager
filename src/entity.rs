@@ -1,114 +1,116 @@
-/*
-   &T: reference
-   T: copy of data if copy trait is implemented, otherwise value
-   &mut T: mutable reference
-*/
+// /*
+//    &T: reference
+//    T: copy of data if copy trait is implemented, otherwise value
+//    &mut T: mutable reference
+// */
 
-use crate::{stats::*, talent::*};
+// use std::iter::Map;
 
-struct Entity {
-    name: String,
-    ancestry: AncestryEnum,
-    background: Background,
-    stats: PlayerStats,
-    class: Class,
-    level: i16,
-    xp: f32,
-    hp: i16,
-    ac: i16,
-    alignment: AlignmentEnum,
-    diety: Diety,
-    title: String,
-    attacks: Vec<Attack>,
-    talents: Vec<Talent>,
-    spells: Vec<Spell>,
-    gear: Vec<Gear>,
-}
+// use crate::{stats::*, talent::*};
 
-impl Entity {
-    fn new() -> Self {
-        todo!()
-    }
-}
+// pub struct Entity<T> {
+//     name: String,
+//     traits: Map<String, Trait<T>>,
+//     ancestry: AncestryEnum,
+//     background: Background,
+//     class: Class,
+//     level: i16,
+//     xp: f32,
+//     hp: i16,
+//     ac: i16,
+//     alignment: AlignmentEnum,
+//     diety: Diety,
+//     title: String,
+//     attacks: Vec<Attack>,
+//     talents: Vec<Talent>,
+//     spells: Vec<Spell>,
+//     gear: Vec<Gear>,
+// }
 
-struct Attack { }
+// impl<T> Entity<T> {
+//     fn new() -> Self {
+        
+//     }
+// }
+
+// struct Attack { }
 
 
-struct Spell { }
+// struct Spell { }
 
-struct Gear { }
+// struct Gear { }
 
-enum AlignmentEnum {
-    Chaotic,
-    Lawful,
-    Neutral,
-}
+// enum AlignmentEnum {
+//     Chaotic,
+//     Lawful,
+//     Neutral,
+// }
 
-enum Diety {}
+// enum Diety {}
 
-enum ClassEnum {
-    Fighter,
-    Priest,
-    Thief,
-    Wizard,
-}
+// enum ClassEnum {
+//     Fighter,
+//     Priest,
+//     Thief,
+//     Wizard,
+// }
 
-enum LanguageEnum {
-    Common,
-    Dwarvish,
-    Elvish,
-    Giant,
-    Goblin,
-    Merran,
-    Orcish,
-    Reptilian,
-    Sylvan,
-    Thanian,
-    Celestial,
-    Diabloic,
-    Draconic,
-    Primordial,
-}
+// enum LanguageEnum {
+//     Common,
+//     Dwarvish,
+//     Elvish,
+//     Giant,
+//     Goblin,
+//     Merran,
+//     Orcish,
+//     Reptilian,
+//     Sylvan,
+//     Thanian,
+//     Celestial,
+//     Diabloic,
+//     Draconic,
+//     Primordial,
+// }
 
-struct Class {
-    class: ClassEnum,
-    languages: Vec<LanguageEnum>,
-    talents: Vec<Talent>,
-}
+// struct Class {
+//     class: ClassEnum,
+//     languages: Vec<LanguageEnum>,
+//     talents: Vec<Talent>,
+// }
 
-enum Background {
-    Urchin,
-    Wanted,
-    CultInitiate,
-    ThievesGuild,
-    Banished,
-    Orphaned,
-    WizardsApprentice,
-    Jeweler,
-    Herbalist,
-    Barbarian,
-    Mercenary,
-    Sailor,
-    Acolyte,
-    Soldier,
-    Ranger,
-    Scout,
-    Minstrel,
-    Scholar,
-    Noble,
-    Chirurgeon,
-    Custom,
-}
+// enum Background {
+//     Urchin,
+//     Wanted,
+//     CultInitiate,
+//     ThievesGuild,
+//     Banished,
+//     Orphaned,
+//     WizardsApprentice,
+//     Jeweler,
+//     Herbalist,
+//     Barbarian,
+//     Mercenary,
+//     Sailor,
+//     Acolyte,
+//     Soldier,
+//     Ranger,
+//     Scout,
+//     Minstrel,
+//     Scholar,
+//     Noble,
+//     Chirurgeon,
+//     Custom,
+// }
 
-enum AncestryEnum {
-    Dwarf,
-    Elf,
-    Goblin,
-    Halfling,
-    HalfOrc,
-    Human,
-}
+// enum AncestryEnum {
+//     Dwarf,
+//     Elf,
+//     Goblin,
+//     Halfling,
+//     HalfOrc,
+//     Human,
+// }
 
-struct Ancestry {}
+// struct Ancestry {}
 
 

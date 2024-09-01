@@ -1,8 +1,8 @@
 
-use crate::stats::StatModifier;
+// use crate::stats::StatModifier;
 
-pub struct Talent {
-    name: Option<String>,
-    description: Option<String>,
-    modifiers: Vec<StatModifier>,
-}
+// pub struct Talent {
+//     name: Option<String>,
+//     description: Option<String>,
+//     modifiers: Vec<StatModifier>,
+// }
