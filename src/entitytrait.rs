@@ -1,10 +1,11 @@
 // use core::fmt;
 
 use std::collections::HashMap;
+use std::sync::Arc;
 
 pub trait EntityTrait {
-    // fn new(key: &'static str) -> Self where Self: Sized;
     fn key(&self) -> &'static str;
+    // fn new(key: &'static str) -> Self where Self: Sized;
     // fn new(key: &'static str, value: T) -> Self;
     // fn modify_value(&mut self, value: T);
     // fn value(self) -> T;
@@ -12,32 +13,30 @@ pub trait EntityTrait {
 
 pub struct EntityStat<T> {
     key: &'static str,
-    value: Box<T>,
+    value: Arc<T>,
 }
 
 impl<T> EntityStat<T> {
-    pub fn new(key: &'static str, value: T) -> Self {
-        Self {
+    pub fn new(key: &'static str, value: T) -> Arc<Self> {
+        Arc::new(Self {
             key,
-            value: Box::new(value),
-        }
+            value: Arc::new(value),
+        })
     }
 
     fn modify_value(&mut self, value: T) {
-        self.value = Box::new(value);
+        self.value = Arc::new(value);
     }
-    
-    fn value(self) -> T {
-        *self.value
+
+    fn value(&self) -> &T {
+        self.value.as_ref()
     }
 }
 
 impl<T> EntityTrait for EntityStat<T> {
-
     fn key(&self) -> &'static str {
         self.key
     }
-
 }
 
 // pub struct EntityStatBlock<StatBlockItem> {
@@ -119,30 +118,42 @@ impl<T> EntityTrait for EntityStat<T> {
 // }
 
 pub struct EntityTraitMap {
-    trait_map: HashMap<&'static str, Box<dyn EntityTrait>>,
+    trait_map: HashMap<&'static str, Arc<dyn EntityTrait>>,
 }
 
 impl EntityTraitMap {
     pub fn new() -> Self {
-        let mut trait_map: HashMap<&'static str, Box<dyn EntityTrait>> = HashMap::new();
+        let mut trait_map: HashMap<&'static str, Arc<dyn EntityTrait>> = HashMap::new();
 
-        let str_ = EntityStat::new("strength", 1);
-        let dex  = EntityStat::new("dexterity", 1);
-        let con  = EntityStat::new("constitution", 1);
-        let int  = EntityStat::new("intelligence", 1);
-        let wis  = EntityStat::new("wisdom", 1);
-        let cha  = EntityStat::new("charisma", 1);
+        let str_ = EntityStat::new("strength", 1_u8);
+        let dex = EntityStat::new("dexterity", 1_u8);
+        let con = EntityStat::new("constitution", 1_u8);
+        let int = EntityStat::new("intelligence", 1_u8);
+        let wis = EntityStat::new("wisdom", 1_u8);
+        let cha = EntityStat::new("charisma", 1_u8);
 
-        trait_map.insert(str_.key(), Box::new(str_));
-        trait_map.insert(dex.key(), Box::new(dex));
-        trait_map.insert(con.key(), Box::new(con));
-        trait_map.insert(int.key(), Box::new(int));
-        trait_map.insert(wis.key(), Box::new(wis));
-        trait_map.insert(cha.key(), Box::new(cha));
+        let hp = EntityStat::new("hp", 1_u8);
 
-        Self {
-            trait_map,
-        }
+        trait_map.insert(str_.key(), str_);
+        trait_map.insert(dex.key(), dex);
+        trait_map.insert(con.key(), con);
+        trait_map.insert(int.key(), int);
+        trait_map.insert(wis.key(), wis);
+        trait_map.insert(cha.key(), cha);
+
+        trait_map.insert(hp.key(), hp);
+
+        Self { trait_map }
+    }
+
+    pub fn add_trait(&mut self, new_trait: Arc<dyn EntityTrait>) {
+        self.trait_map.insert(new_trait.key(), new_trait);
+    }
+}
+
+impl Default for EntityTraitMap {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
@@ -155,7 +166,7 @@ impl EntityTraitMap {
 //         let mut traits = HashMap::new();
 //         let trait_1 = EntityStat::new("test", 1);
 //         let trait_2 = EntityStat::new("test_2", "a");
-        
+
 //         traits.insert(trait_1.key(), trait_1);
 //         traits.insert(trait_2.key(), trait_2);
 //     }
