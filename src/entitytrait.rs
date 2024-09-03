@@ -2,11 +2,12 @@
 
 use std::collections::HashMap;
 
-pub trait EntityTrait<T> {
-    // fn new(key: &'static str, value: T) -> Self;
+pub trait EntityTrait {
+    // fn new(key: &'static str) -> Self where Self: Sized;
     fn key(&self) -> &'static str;
-    fn modify_value(&mut self, value: T);
-    fn value(self) -> T;
+    // fn new(key: &'static str, value: T) -> Self;
+    // fn modify_value(&mut self, value: T);
+    // fn value(self) -> T;
 }
 
 pub struct EntityStat<T> {
@@ -21,21 +22,22 @@ impl<T> EntityStat<T> {
             value: Box::new(value),
         }
     }
+
+    fn modify_value(&mut self, value: T) {
+        self.value = Box::new(value);
+    }
+    
+    fn value(self) -> T {
+        *self.value
+    }
 }
 
-impl<T> EntityTrait<T> for EntityStat<T> {
+impl<T> EntityTrait for EntityStat<T> {
 
     fn key(&self) -> &'static str {
         self.key
     }
 
-    fn modify_value(&mut self, value: T) {
-        self.value = Box::new(value);
-    }
-
-    fn value(self) -> T {
-        *self.value
-    }
 }
 
 // pub struct EntityStatBlock<StatBlockItem> {
@@ -116,13 +118,13 @@ impl<T> EntityTrait<T> for EntityStat<T> {
 //     }
 // }
 
-pub struct EntityTraitMap<T> where T: EntityTrait<T> {
-    trait_map: HashMap<&'static str, Box<dyn EntityTrait<T>>>,
+pub struct EntityTraitMap {
+    trait_map: HashMap<&'static str, Box<dyn EntityTrait>>,
 }
 
-impl<T> EntityTraitMap<T> where T: EntityTrait<T> {
+impl EntityTraitMap {
     pub fn new() -> Self {
-        let mut trait_map: HashMap<&'static str, Box<dyn EntityTrait<T>>> = HashMap::new();
+        let mut trait_map: HashMap<&'static str, Box<dyn EntityTrait>> = HashMap::new();
 
         let str_ = EntityStat::new("strength", 1);
         let dex  = EntityStat::new("dexterity", 1);
@@ -132,6 +134,11 @@ impl<T> EntityTraitMap<T> where T: EntityTrait<T> {
         let cha  = EntityStat::new("charisma", 1);
 
         trait_map.insert(str_.key(), Box::new(str_));
+        trait_map.insert(dex.key(), Box::new(dex));
+        trait_map.insert(con.key(), Box::new(con));
+        trait_map.insert(int.key(), Box::new(int));
+        trait_map.insert(wis.key(), Box::new(wis));
+        trait_map.insert(cha.key(), Box::new(cha));
 
         Self {
             trait_map,
