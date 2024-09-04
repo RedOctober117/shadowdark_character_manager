@@ -3,23 +3,71 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
+pub enum DiceEnum {
+    D4,
+    D6,
+    D8,
+    D10,
+    D12,
+    D20,
+    D100,
+}
+
 pub trait EntityTrait {
     fn key(&self) -> &'static str;
-    // fn modify_key(&mut self, key: &'static str);
-    // fn new(key: &'static str) -> Self where Self: Sized;
-    // fn new(key: &'static str, value: T) -> Self;
-    // fn modify_value(&mut self, value: T);
-    // fn value(self) -> T;
 }
 
 pub trait EntityTraitModifier {
     fn target_trait_key(&self) -> &'static str;
 }
 
+pub trait EntityItem {
+    fn name(&self) -> &'static str;
+    fn cost(&self) -> u16;
+    fn quantity(&self) -> u16;
+}
+
+pub enum EntityWeaponType {
+    Melee,
+    Ranged,
+}
+
+pub enum EntityWeaponWield {
+    SingleHanded,
+    TwoHanded,
+}
+
+pub enum Range {
+    Near,
+    Close,
+    Far,
+}
+
+pub struct EntityWeapon {
+    name: &'static str,
+    cost: u16,
+    quantity: u16,
+    
+    slots: u8,
+
+    damage_die: DiceEnum,
+    weapon_type: EntityWeaponType,
+    handedness: EntityWeaponWield,
+    range: Range,
+    properties: HashMap<&'static str, Arc<dyn EntityTrait>>,
+}
+
+impl EntityItem for EntityWeapon {
+
+}
+
+impl EntityTraitModifier for EntityWeapon {
+
+}
+
 pub struct EntityStat<T> {
     key: &'static str,
     value: Arc<T>,
-    modifiers: Vec<T>,
 }
 
 impl<T> EntityStat<T> {
@@ -27,7 +75,6 @@ impl<T> EntityStat<T> {
         Arc::new(Self {
             key,
             value: Arc::new(value),
-            modifiers: vec![],
         })
     }
     
