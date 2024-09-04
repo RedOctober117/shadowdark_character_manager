@@ -1,10 +1,10 @@
-Trait<T>
- - key: string
- - value: T
+trait EntityTrait
+ - key()
 
-EntityStatBlock
- - key: string
- - stat_map: HashMap<string, Trait<u8>>
-
-Entity<T>
- - traits: HashMap<string, Trait<T>>
+struct EntityStat<T>: EntityTrait
+ - key
+ - value
+ - key()
+ - value()
+ - modify_value(value: T)
+ - modify_key(key: &'static str)

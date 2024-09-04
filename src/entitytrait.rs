@@ -5,15 +5,21 @@ use std::sync::Arc;
 
 pub trait EntityTrait {
     fn key(&self) -> &'static str;
+    // fn modify_key(&mut self, key: &'static str);
     // fn new(key: &'static str) -> Self where Self: Sized;
     // fn new(key: &'static str, value: T) -> Self;
     // fn modify_value(&mut self, value: T);
     // fn value(self) -> T;
 }
 
+pub trait EntityTraitModifier {
+    fn target_trait_key(&self) -> &'static str;
+}
+
 pub struct EntityStat<T> {
     key: &'static str,
     value: Arc<T>,
+    modifiers: Vec<T>,
 }
 
 impl<T> EntityStat<T> {
@@ -21,15 +27,16 @@ impl<T> EntityStat<T> {
         Arc::new(Self {
             key,
             value: Arc::new(value),
+            modifiers: vec![],
         })
+    }
+    
+    fn value(&self) -> &T {
+        self.value.as_ref()
     }
 
     fn modify_value(&mut self, value: T) {
         self.value = Arc::new(value);
-    }
-
-    fn value(&self) -> &T {
-        self.value.as_ref()
     }
 }
 
@@ -37,6 +44,10 @@ impl<T> EntityTrait for EntityStat<T> {
     fn key(&self) -> &'static str {
         self.key
     }
+
+    // fn modify_key(&mut self, key: &'static str) {
+    //     self.key = key;
+    // }
 }
 
 // pub struct EntityStatBlock<StatBlockItem> {
@@ -132,7 +143,7 @@ impl EntityTraitMap {
         let wis = EntityStat::new("wisdom", 1_u8);
         let cha = EntityStat::new("charisma", 1_u8);
 
-        let hp = EntityStat::new("hp", 1_u8);
+        let hp = EntityStat::new("hp", 1);
 
         trait_map.insert(str_.key(), str_);
         trait_map.insert(dex.key(), dex);
