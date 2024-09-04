@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+use std::ops::Deref;
+
 use crate::{entity::*, talent::*, entitytrait::*};
 
 pub mod entity;
@@ -7,6 +9,11 @@ pub mod talent;
 pub mod entitytrait;
 
 fn main() {
+
+    let mut entity_traits = EntityTraitMap::new();
+    entity_traits.add_trait(EntityStat::new("test", 1));
+
+    println!("{:?}", entity_traits.get_trait("test"));
     // let mut stat_block = PlayerStats::new();
 
     // println!("str: {}", stat_block.get_stat(StatsEnum::Strength));

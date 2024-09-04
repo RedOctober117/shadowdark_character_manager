@@ -1,5 +1,6 @@
 // use core::fmt;
 
+use std::vec::Vec;
 use std::collections::HashMap;
 use std::sync::Arc;
 
@@ -13,6 +14,12 @@ pub enum DiceEnum {
     D100,
 }
 
+impl EntityTrait for DiceEnum {
+    fn key(&self) -> &'static str {
+        "dice"
+    }
+}
+
 pub trait EntityTrait {
     fn key(&self) -> &'static str;
 }
@@ -21,20 +28,46 @@ pub trait EntityTraitModifier {
     fn target_trait_key(&self) -> &'static str;
 }
 
-pub trait EntityItem {
+pub trait Item {
     fn name(&self) -> &'static str;
     fn cost(&self) -> u16;
     fn quantity(&self) -> u16;
 }
 
-pub enum EntityWeaponType {
+pub enum WeaponType {
     Melee,
     Ranged,
 }
 
-pub enum EntityWeaponWield {
+impl EntityTrait for WeaponType {
+    fn key(&self) -> &'static str {
+        "weapon_type"
+    }
+}
+
+pub enum WeaponStance {
     SingleHanded,
     TwoHanded,
+    Both,
+}
+
+impl EntityTrait for WeaponStance {
+    fn key(&self) -> &'static str {
+        "weapon_stance"
+    }
+}
+
+pub enum WeaponStyle {
+    Versatile,
+    Finess,
+    Loading,
+    Thrown,
+}
+
+impl EntityTrait for WeaponStyle {
+    fn key(&self) -> &'static str {
+        "weapon_style"
+    }
 }
 
 pub enum Range {
@@ -43,27 +76,65 @@ pub enum Range {
     Far,
 }
 
-pub struct EntityWeapon {
+impl EntityTrait for Range {
+    fn key(&self) -> &'static str {
+        "range"
+    }
+}
+
+pub struct Weapon {
     name: &'static str,
     cost: u16,
     quantity: u16,
     
     slots: u8,
 
-    damage_die: DiceEnum,
-    weapon_type: EntityWeaponType,
-    handedness: EntityWeaponWield,
-    range: Range,
-    properties: HashMap<&'static str, Arc<dyn EntityTrait>>,
+    properties: EntityTraitMap
 }
 
-impl EntityItem for EntityWeapon {
+impl Weapon {
+    pub fn new(name: &'static str, cost: u16, quantity: u16) -> Self {
+        let mut properties = EntityTraitMap::new();
 
+        Self {
+            name,
+            cost,
+            quantity,
+
+            slots: 0,
+
+            properties,
+        }
+    }
 }
 
-impl EntityTraitModifier for EntityWeapon {
+impl Item for Weapon {
+    fn name(&self) -> &'static str {
+        self.name
+    }
 
+    fn cost(&self) -> u16 {
+        self.cost
+    }
+
+    fn quantity(&self) -> u16 {
+        self.quantity
+    }
 }
+
+impl EntityTraitModifier for Weapon {
+    fn target_trait_key(&self) -> &'static str {
+        "slots"
+    }
+
+    // fn modifier(&self) -> i8 {
+    //     &self.
+    // }
+}
+
+// impl EntityTraitModifier for Weapon {
+
+// }
 
 pub struct EntityStat<T> {
     key: &'static str,
@@ -175,13 +246,55 @@ impl<T> EntityTrait for EntityStat<T> {
 //     }
 // }
 
+struct EntityTraitError {}
+
 pub struct EntityTraitMap {
     trait_map: HashMap<&'static str, Arc<dyn EntityTrait>>,
 }
 
 impl EntityTraitMap {
     pub fn new() -> Self {
-        let mut trait_map: HashMap<&'static str, Arc<dyn EntityTrait>> = HashMap::new();
+        let trait_map: HashMap<&'static str, Arc<dyn EntityTrait>> = HashMap::new();
+
+        Self { trait_map }
+    }
+
+    pub fn add_trait(&mut self, new_trait: Arc<dyn EntityTrait>) {
+        self.trait_map.insert(new_trait.key(), new_trait);
+    }
+
+    pub fn get_trait(&self, key: &'static str) -> Option<&Arc<dyn EntityTrait>> {
+        self.trait_map.get(key)
+    }
+
+    pub fn has_trait(&self, query: &str) -> bool {
+        self.trait_map.contains_key(query)
+    }
+
+    pub fn keys_as_vec(&self) -> Vec<&str> {
+        let mut vector = vec![];
+        for key in self.trait_map.keys() {
+            vector.push(key.to_owned());
+        }
+
+        vector
+    }
+}
+
+impl Default for EntityTraitMap {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+pub struct PlayerCharacter {
+    traits: EntityTraitMap,
+
+}
+
+impl PlayerCharacter {
+    pub fn new() -> Self {
+        let mut traits = EntityTraitMap::new();
 
         let str_ = EntityStat::new("strength", 1_u8);
         let dex = EntityStat::new("dexterity", 1_u8);
@@ -191,27 +304,21 @@ impl EntityTraitMap {
         let cha = EntityStat::new("charisma", 1_u8);
 
         let hp = EntityStat::new("hp", 1);
+        let xp = EntityStat::new("xp", 1);
 
-        trait_map.insert(str_.key(), str_);
-        trait_map.insert(dex.key(), dex);
-        trait_map.insert(con.key(), con);
-        trait_map.insert(int.key(), int);
-        trait_map.insert(wis.key(), wis);
-        trait_map.insert(cha.key(), cha);
+        traits.add_trait(str_);
+        traits.add_trait(dex);
+        traits.add_trait(con);
+        traits.add_trait(int);
+        traits.add_trait(wis);
+        traits.add_trait(cha);
 
-        trait_map.insert(hp.key(), hp);
+        traits.add_trait(hp);
+        traits.add_trait(xp);
 
-        Self { trait_map }
-    }
-
-    pub fn add_trait(&mut self, new_trait: Arc<dyn EntityTrait>) {
-        self.trait_map.insert(new_trait.key(), new_trait);
-    }
-}
-
-impl Default for EntityTraitMap {
-    fn default() -> Self {
-        Self::new()
+        Self {
+            traits
+        }
     }
 }
 
