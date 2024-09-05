@@ -10,10 +10,10 @@ pub mod entitytrait;
 
 fn main() {
 
-    let mut entity_traits = EntityTraitMap::new();
-    entity_traits.add_trait(EntityStat::new("test", 1));
+    // let mut entity_traits = EntityTraitMap::new();
+    // entity_traits.add_trait(EntityStat::new("test", 1));
 
-    println!("{:?}", entity_traits.get_trait("test"));
+    // println!("{:?}", entity_traits.get_trait("test"));
     // let mut stat_block = PlayerStats::new();
 
     // println!("str: {}", stat_block.get_stat(StatsEnum::Strength));
