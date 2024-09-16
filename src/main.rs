@@ -1,14 +1,18 @@
 #![allow(dead_code)]
 
-use std::ops::Deref;
+// use std::ops::Deref;
 
-use crate::{entity::*, talent::*, entitytrait::*};
+use crate::{entitytrait::*};
 
 pub mod entity;
 pub mod talent;
 pub mod entitytrait;
 
 fn main() {
+
+    let mut test_player = Player::new();
+
+    // test_player.add_trait(PlayerTrait::<u16>::new(String::from("trait_1")));
 
     // let mut entity_traits = EntityTraitMap::new();
     // entity_traits.add_trait(EntityStat::new("test", 1));
