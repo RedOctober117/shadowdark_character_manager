@@ -13,6 +13,12 @@ pub struct Item {
     slots: u8,
 }
 
+impl Item {
+    pub fn new(name: String, cost: u16, slots: u8) -> Self {
+        Self { name, cost, slots }
+    }
+}
+
 impl AbstractItem for Item {
     fn name(&self) -> &str {
         &self.name

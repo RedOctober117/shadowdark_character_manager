@@ -15,10 +15,10 @@ where
 
 impl<T: AbstractItem> AbstractInventory<T> {
     /// Builds a new `AbstractInventory` and instantiates an empty vec.
-    pub fn new(total_slots: u8, used_slots: u8) -> Self {
+    pub fn new(total_slots: u8) -> Self {
         Self {
             capacity: total_slots,
-            used_slots,
+            used_slots: 0,
             items: vec![],
         }
     }
@@ -50,6 +50,7 @@ impl<T: AbstractItem> AbstractInventory<T> {
             Err(InventoryIsFullError)
         } else {
             self.items.push(item);
+            self.used_slots += 1;
             Ok(())
         }
     }
