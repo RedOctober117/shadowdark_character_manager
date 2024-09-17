@@ -10,6 +10,12 @@ pub struct Talent {
 }
 
 impl Talent {
+    pub fn new(description: String) -> Self {
+        Self {
+            description,
+            modifiers: None,
+        }
+    }
     pub fn description(&self) -> &str {
         &self.description
     }
@@ -20,6 +26,15 @@ impl Talent {
         match &self.modifiers {
             Some(e) => Some(e),
             None => None,
+        }
+    }
+
+    pub fn add_modifier(&mut self, modifier: AttributeModifier) {
+        match &mut self.modifiers {
+            None => {
+                self.modifiers = Some(vec![modifier]);
+            }
+            Some(m) => m.push(modifier),
         }
     }
 }

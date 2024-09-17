@@ -4,10 +4,12 @@ pub mod armour;
 pub mod attributes;
 pub mod currency;
 pub mod dice;
+pub mod hp;
 pub mod inventory;
 pub mod item;
 pub mod talent;
 pub mod weapon;
+pub mod xp;
 
 pub fn main() {
     let mut test_attributes = Attributes::new();
@@ -25,8 +27,13 @@ pub fn main() {
 #[cfg(test)]
 mod tests {
     use currency::Currency;
+    use dice::Dice;
+    use dice::ToRoll;
+    use hp::Hp;
+    use hp::HpStateEnum;
     use inventory::AbstractInventory;
     use item::Item;
+    use xp::Xp;
 
     use super::*;
 
@@ -124,5 +131,47 @@ mod tests {
         if test_inv.add_item(item_1).is_ok() {
             panic!()
         }
+    }
+
+    #[test]
+    fn test_add_xp() {
+        let mut test_xp = Xp::new(1);
+        test_xp.add_xp(5);
+
+        assert_eq!(test_xp.current_xp(), 5);
+        assert_eq!(test_xp.lifetime_xp(), 5);
+        assert_eq!(test_xp.level(), 1);
+    }
+
+    #[test]
+    fn test_level_up() {
+        let mut test_xp = Xp::new(1);
+        test_xp.add_xp(30);
+
+        assert_eq!(test_xp.current_xp(), 0);
+        assert_eq!(test_xp.lifetime_xp(), 30);
+        assert_eq!(test_xp.level(), 2);
+    }
+
+    #[test]
+    fn test_hp_damage() {
+        let mut test_hp = Hp::new(10, ToRoll::new(Dice::D8, 1));
+        test_hp.damage(5);
+
+        assert_eq!(test_hp.current(), 5);
+        assert_eq!(test_hp.state(), HpStateEnum::Alive);
+    }
+
+    #[test]
+    fn test_hp_kill() {
+        let mut test_hp = Hp::new(10, ToRoll::new(Dice::D8, 1));
+        test_hp.damage(10);
+
+        assert_eq!(test_hp.current(), 0);
+        assert_eq!(test_hp.state(), HpStateEnum::Dying);
+
+        test_hp.kill();
+        assert_eq!(test_hp.current(), 0);
+        assert_eq!(test_hp.state(), HpStateEnum::Dead);
     }
 }
