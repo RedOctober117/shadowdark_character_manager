@@ -2,6 +2,7 @@ use attributes::{Attrbiute, AttributeModifier, Attributes};
 
 pub mod attributes;
 pub mod dice;
+pub mod inventory;
 pub mod item;
 pub mod weapon;
 
