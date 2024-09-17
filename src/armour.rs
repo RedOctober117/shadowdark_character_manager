@@ -72,3 +72,8 @@ impl ArmourProperty {
         &self.description
     }
 }
+
+pub enum ArmourTypeEnum {
+    Leather,
+    Chainmail,
+}
