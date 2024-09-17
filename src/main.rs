@@ -1,7 +1,9 @@
 use attributes::{Attrbiute, AttributeModifier, Attributes};
 
 pub mod attributes;
+pub mod dice;
 pub mod item;
+pub mod weapon;
 
 pub fn main() {
     let mut test_attributes = Attributes::new();
