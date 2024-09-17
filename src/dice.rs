@@ -1,3 +1,4 @@
+/// Enumerates the dice available in Shadowdark.
 #[derive(Clone, Copy, Debug)]
 pub enum Dice {
     D4,
@@ -10,7 +11,7 @@ pub enum Dice {
 }
 
 /// Represents a roll in Shadowdark, ie., 1d20, 5d6.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct ToRoll {
     die: Dice,
     times: u8,
