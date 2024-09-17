@@ -1,4 +1,5 @@
 use crate::{
+    currency::Currency,
     dice::ToRoll,
     item::{AbstractItem, RangeEnum},
 };
@@ -6,9 +7,10 @@ use crate::{
 /// Represents a weapon in Shadowdark. Includes fields required to add the
 /// `AbstractItem` trait. May need to be expanded to allow the addition or
 /// removal of `WeaponProperty`s and `ToRoll`s at runtime.
+#[derive(Clone, Debug)]
 pub struct Weapon {
     name: String,
-    cost: u16,
+    cost: Currency,
     slots: u8,
 
     range: RangeEnum,
@@ -19,7 +21,7 @@ pub struct Weapon {
 impl Weapon {
     pub fn new(
         name: String,
-        cost: u16,
+        cost: Currency,
         slots: u8,
         range: RangeEnum,
         damage: Vec<ToRoll>,
@@ -57,7 +59,7 @@ impl AbstractItem for Weapon {
         &self.name
     }
 
-    fn cost(&self) -> u16 {
+    fn cost(&self) -> Currency {
         self.cost
     }
 
@@ -67,6 +69,7 @@ impl AbstractItem for Weapon {
 }
 
 /// Represents a property of a weapon.
+#[derive(Clone, Debug)]
 pub struct WeaponProperty {
     name: String,
     description: String,

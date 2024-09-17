@@ -4,6 +4,7 @@ use crate::item::AbstractItem;
 
 /// Represents an abstract inventory. armour, weapons, talents, and backpacks
 /// all have this structure.
+#[derive(Clone, Debug)]
 pub struct AbstractInventory<T>
 where
     T: AbstractItem,
@@ -57,7 +58,7 @@ impl<T: AbstractItem> AbstractInventory<T> {
 }
 
 /// Error to signal that an `AbstractInventory` is full.
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug)]
 pub struct InventoryIsFullError;
 
 impl fmt::Display for InventoryIsFullError {
