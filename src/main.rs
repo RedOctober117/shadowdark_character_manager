@@ -1,7 +1,10 @@
 use attributes::{Attrbiute, AttributeModifier, Attributes};
 
 pub mod attributes;
+pub mod dice;
+pub mod inventory;
 pub mod item;
+pub mod weapon;
 
 pub fn main() {
     let mut test_attributes = Attributes::new();
@@ -18,6 +21,9 @@ pub fn main() {
 
 #[cfg(test)]
 mod tests {
+    use inventory::AbstractInventory;
+    use item::Item;
+
     use super::*;
 
     #[test]
@@ -70,5 +76,32 @@ mod tests {
         assert_eq!(test_matrix.get_attribute(Attrbiute::Intelligence), 0);
         assert_eq!(test_matrix.get_attribute(Attrbiute::Wisdom), 0);
         assert_eq!(test_matrix.get_attribute(Attrbiute::Constitution), 0);
+    }
+
+    #[test]
+    fn test_new_inventory() {
+        let test_inv: AbstractInventory<Item> = AbstractInventory::new(1);
+        assert_eq!(test_inv.used_slots(), 0);
+        assert_eq!(test_inv.free_slots(), 1);
+        assert_eq!(test_inv.capacity(), 1);
+    }
+
+    #[test]
+    fn test_add_item_to_inv() {
+        let mut test_inv: AbstractInventory<Item> = AbstractInventory::new(2);
+        let item_1 = Item::new(String::from("item_1"), 1, 1);
+
+        assert!(test_inv.add_item(item_1).is_ok());
+        assert_eq!(test_inv.free_slots(), 1);
+    }
+
+    #[test]
+    fn test_overfill_inv() {
+        let mut test_inv: AbstractInventory<Item> = AbstractInventory::new(2);
+        let item_1 = Item::new(String::from("item_1"), 1, 3);
+
+        if test_inv.add_item(item_1).is_ok() {
+            panic!()
+        }
     }
 }

@@ -27,6 +27,7 @@ pub struct AttributeModifier {
 }
 
 impl AttributeModifier {
+    /// Returns a new `AttributeModifier` with the `entry_index` set to `None`.
     pub fn new(attribute: Attrbiute, modifier: i16) -> Self {
         Self {
             attribute,
@@ -35,6 +36,7 @@ impl AttributeModifier {
         }
     }
 
+    /// Returns the attribute modified.
     pub fn attribute(&self) -> Attrbiute {
         self.attribute
     }
@@ -51,6 +53,14 @@ pub struct Attributes {
 }
 
 impl Attributes {
+    /// Initializes the required vec of vecs:
+    /// ```
+    /// [
+    ///   (str)[base, . . .],
+    ///   (dex)[base, . . .],
+    ///    . . .
+    /// ]
+    /// ```
     pub fn new() -> Self {
         Self {
             //vec![value;times]
@@ -58,6 +68,7 @@ impl Attributes {
         }
     }
 
+    /// Returns an attributes value by summing every value in the relevant vec.
     pub fn get_attribute(&self, attribute: Attrbiute) -> i16 {
         let mut sum = 0;
         for i in &self.attribute_matrix[Attributes::attribute_to_index(attribute)] {
@@ -67,6 +78,8 @@ impl Attributes {
         sum
     }
 
+    /// Converts an `Attribute` enum to a `usize` corresponding to its index
+    /// in the attribute matrix.
     pub fn attribute_to_index(attribute: Attrbiute) -> usize {
         match attribute {
             Attrbiute::Strength => 0,
@@ -78,12 +91,15 @@ impl Attributes {
         }
     }
 
+    /// Add a modifier to an attribute. Does not take ownership of the
+    /// attribute or its modifier.
     pub fn add_attribute_modifier(&mut self, modifier: &AttributeModifier) -> usize {
         self.attribute_matrix[Attributes::attribute_to_index(modifier.attribute())]
             .push(modifier.modifier);
         self.attribute_matrix[0].len() - 1
     }
 
+    /// Removes an `AttributeModifier` by setting its value in the matrix to 0.
     pub fn remove_attribute_modifier(&mut self, modifier: &AttributeModifier) {
         let target_index = modifier.entry_index.unwrap_or(0);
         match target_index {
