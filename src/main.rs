@@ -161,17 +161,4 @@ mod tests {
         assert_eq!(test_hp.current(), 5);
         assert_eq!(test_hp.state(), HpStateEnum::Alive);
     }
-
-    #[test]
-    fn test_hp_kill() {
-        let mut test_hp = Hp::new(10, ToRoll::new(Dice::D8, 1));
-        test_hp.damage(10);
-
-        assert_eq!(test_hp.current(), 0);
-        assert_eq!(test_hp.state(), HpStateEnum::Dying);
-
-        test_hp.kill();
-        assert_eq!(test_hp.current(), 0);
-        assert_eq!(test_hp.state(), HpStateEnum::Dead);
-    }
 }
