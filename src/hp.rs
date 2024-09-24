@@ -1,5 +1,4 @@
 use crate::dice::ToRoll;
-use crate::dice::Dice;
 use std::cmp::min;
 
 /// Use an enum to implement status like unconscious, etc.
@@ -66,6 +65,7 @@ pub enum HpStateEnum {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::dice::Dice;
 
     #[test]
     fn test_healing() {
