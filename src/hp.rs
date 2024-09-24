@@ -1,4 +1,5 @@
 use crate::dice::ToRoll;
+use std::cmp::min;
 
 /// Use an enum to implement status like unconscious, etc.
 pub struct Hp {
@@ -36,15 +37,15 @@ impl Hp {
 
     pub fn heal(&mut self, value: u16) {
         if let Some(sum) = self.current.checked_add(value) {
-            self.current = sum;
+            self.current = min(sum, self.total);
         } else {
             self.current = self.total;
         }
     }
 
     pub fn damage(&mut self, value: u16) {
-        if let Some(sub) = self.current.checked_sub(value) {
-            self.current = sub;
+        if let Some(sum) = self.current.checked_sub(value) {
+            self.current = sum;
         } else {
             self.current = 0;
             self.state = HpStateEnum::Dying;
