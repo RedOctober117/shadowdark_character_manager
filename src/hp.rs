@@ -1,4 +1,5 @@
 use crate::dice::ToRoll;
+use std::cmp::max;
 
 /// Use an enum to implement status like unconscious, etc.
 pub struct Hp {
@@ -34,8 +35,15 @@ impl Hp {
         self.state
     }
 
-    pub fn damage(&mut self, damage: u16) {
-        self.current -= damage;
+    pub fn heal(&mut self, value: u16) {
+        self.current = max(
+            self.current + value,
+            self.total
+        );
+    }
+
+    pub fn damage(&mut self, value: u16) {
+        self.current -= value;
         if self.current == 0 {
             self.state = HpStateEnum::Dying;
         }
