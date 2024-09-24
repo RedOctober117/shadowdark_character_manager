@@ -52,8 +52,6 @@ impl Hp {
                 self.total
             )
         }
-
- 
     }
 
     pub fn damage(&mut self, value: u16) {
