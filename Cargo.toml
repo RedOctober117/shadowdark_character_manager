@@ -4,6 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-serde = { version = "1.0.210", features = ["derive"] }
-surrealdb = { version = "2.0.1", features = ["kv-rocksdb"] }
-tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
+rusqlite = { version = "0.32.1", features = ["bundled"] }

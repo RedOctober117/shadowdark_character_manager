@@ -1,0 +1,26 @@
+-- Stat modifier calculation can be done on the client end.
+CREATE TABLE
+    stats_enum (ID INTEGER PRIMARY KEY, stat VARCHAR(15) UNIQUE);
+
+CREATE TABLE
+    player_stats (
+        player_id INTEGER,
+        stat_id INTEGER,
+        value INTEGER,
+        CONSTRAINT composite_key PRIMARY KEY (player_id, stat_id)
+    );
+
+INSERT INTO
+    stats_enum (stat)
+VALUES
+    ('Strength'),
+    ('Dexterity'),
+    ('Constitution'),
+    ('Intelligence'),
+    ('Wisdom'),
+    ('Charisma');
+
+SELECT
+    *
+FROM
+    stats_enum;
