@@ -36,10 +36,24 @@ impl Hp {
     }
 
     pub fn heal(&mut self, value: u16) {
-        self.current = min(
-            self.current + value,
-            self.total
-        );
+
+        // This logic is to ensure the healing doesn't overflow u16 and panic
+        // Should probably compare against total since that will almost never be this high
+        // Eh, I'll do it later
+        let diff = u16::max_value() - self.current(); 
+        if value < diff {
+            self.current = min(
+                self.current + value,
+                self.total
+            );
+        } else {
+            self.current = min(
+                u16::max_value(),
+                self.total
+            )
+        }
+
+ 
     }
 
     pub fn damage(&mut self, value: u16) {
@@ -118,5 +132,17 @@ mod tests {
         };
         hp.damage(13);
         assert_eq!(hp.current(), 0)
+    }
+
+    #[test]
+    fn test_hp_healing_u16overflow() {
+        let mut hp = Hp{
+            total: u16::max_value(),
+            current: u16::max_value(),
+            hit_die: ToRoll::new(Dice::D10, 1),
+            state: HpStateEnum::Alive
+        };
+        hp.heal(1);
+        assert_eq!(hp.current(), hp.total());
     }
 }
