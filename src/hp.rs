@@ -1,5 +1,6 @@
 use crate::dice::ToRoll;
-use std::cmp::max;
+use crate::dice::Dice;
+use std::cmp::min;
 
 /// Use an enum to implement status like unconscious, etc.
 pub struct Hp {
@@ -36,7 +37,7 @@ impl Hp {
     }
 
     pub fn heal(&mut self, value: u16) {
-        self.current = max(
+        self.current = min(
             self.current + value,
             self.total
         );
@@ -60,4 +61,21 @@ pub enum HpStateEnum {
     Alive,
     Dying,
     Dead,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_healing() {
+        let mut hp = Hp{
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 5,
+            state: HpStateEnum::Alive
+        };
+        hp.heal(2);
+        assert_eq!(hp.current(), 7)
+    }
 }
