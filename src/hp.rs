@@ -43,10 +43,15 @@ impl Hp {
     }
 
     pub fn damage(&mut self, value: u16) {
-        self.current -= value;
-        if self.current == 0 {
-            self.state = HpStateEnum::Dying;
-        }
+        match value > self.current() {
+            true => {
+                self.current = 0;
+                self.state = HpStateEnum::Dying
+            },
+            false => {
+                self.current -= value;
+            }
+        };
     }
 
     pub fn kill(&mut self) {
@@ -68,7 +73,7 @@ mod tests {
     use crate::dice::Dice;
 
     #[test]
-    fn test_healing() {
+    fn test_hp_healing() {
         let mut hp = Hp{
             total: 10,
             hit_die: ToRoll::new(Dice::D10, 1),
@@ -77,5 +82,41 @@ mod tests {
         };
         hp.heal(2);
         assert_eq!(hp.current(), 7)
+    }
+
+    #[test]
+    fn test_hp_healing_max() {
+        let mut hp = Hp{
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 8,
+            state: HpStateEnum::Alive
+        };
+        hp.heal(5);
+        assert_eq!(hp.current(), hp.total())
+    }
+
+    #[test]
+    fn test_hp_damage() {
+        let mut hp = Hp{
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 10,
+            state: HpStateEnum::Alive
+        };
+        hp.damage(5);
+        assert_eq!(hp.current(), 5)
+    }
+
+    #[test]
+    fn test_hp_dying() {
+        let mut hp = Hp{
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 10,
+            state: HpStateEnum::Alive
+        };
+        hp.damage(13);
+        assert_eq!(hp.current(), 0)
     }
 }
