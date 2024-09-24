@@ -1,5 +1,5 @@
 use crate::dice::ToRoll;
-use std::cmp::min;
+use std::cmp::{min,max};
 
 /// Use an enum to implement status like unconscious, etc.
 pub struct Hp {
@@ -36,33 +36,26 @@ impl Hp {
     }
 
     pub fn heal(&mut self, value: u16) {
+        self.current = min(
+            match self.current().checked_add(value) {
+                Some(val) => val,
+                None => u16::MAX
+            },
+            self.total()
+        )
 
-        // This logic is to ensure the healing doesn't overflow u16 and panic
-        // Should probably compare against total since that will almost never be this high
-        // Eh, I'll do it later
-        let diff = u16::max_value() - self.current(); 
-        if value < diff {
-            self.current = min(
-                self.current + value,
-                self.total
-            );
-        } else {
-            self.current = min(
-                u16::max_value(),
-                self.total
-            )
-        }
     }
 
     pub fn damage(&mut self, value: u16) {
-        match value > self.current() {
-            true => {
-                self.current = 0;
-                self.state = HpStateEnum::Dying
+        self.current = max(
+            match self.current().checked_sub(value) {
+                Some(val) => val,
+                None => u16::MIN
             },
-            false => {
-                self.current -= value;
-            }
+            0
+        );
+        if self.current() == 0 {
+            self.state = HpStateEnum::Dying
         };
     }
 
