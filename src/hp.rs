@@ -1,4 +1,5 @@
 use crate::dice::ToRoll;
+use std::cmp::min;
 
 /// Use an enum to implement status like unconscious, etc.
 pub struct Hp {
@@ -34,9 +35,19 @@ impl Hp {
         self.state
     }
 
-    pub fn damage(&mut self, damage: u16) {
-        self.current -= damage;
-        if self.current == 0 {
+    pub fn heal(&mut self, value: u16) {
+        if let Some(sum) = self.current.checked_add(value) {
+            self.current = min(sum, self.total);
+        } else {
+            self.current = self.total;
+        }
+    }
+
+    pub fn damage(&mut self, value: u16) {
+        if let Some(sum) = self.current.checked_sub(value) {
+            self.current = sum;
+        } else {
+            self.current = 0;
             self.state = HpStateEnum::Dying;
         }
     }
@@ -52,4 +63,84 @@ pub enum HpStateEnum {
     Alive,
     Dying,
     Dead,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::dice::Dice;
+
+    #[test]
+    fn test_hp_healing() {
+        let mut hp = Hp {
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 5,
+            state: HpStateEnum::Alive,
+        };
+        hp.heal(2);
+        assert_eq!(hp.current(), 7)
+    }
+
+    #[test]
+    fn test_hp_healing_max() {
+        let mut hp = Hp {
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 8,
+            state: HpStateEnum::Alive,
+        };
+        hp.heal(5);
+        assert_eq!(hp.current(), hp.total())
+    }
+
+    #[test]
+    fn test_hp_damage() {
+        let mut hp = Hp {
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 10,
+            state: HpStateEnum::Alive,
+        };
+        hp.damage(5);
+        assert_eq!(hp.current(), 5)
+    }
+
+    #[test]
+    fn test_hp_dying() {
+        let mut hp = Hp {
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 10,
+            state: HpStateEnum::Alive,
+        };
+        hp.damage(13);
+        assert_eq!(hp.current(), 0);
+        assert_eq!(hp.state(), HpStateEnum::Dying);
+    }
+
+    #[test]
+    fn test_hp_kill() {
+        let mut hp = Hp {
+            total: 10,
+            hit_die: ToRoll::new(Dice::D10, 1),
+            current: 10,
+            state: HpStateEnum::Alive,
+        };
+        hp.kill();
+        assert_eq!(hp.current(), 0);
+        assert_eq!(hp.state(), HpStateEnum::Dead);
+    }
+
+    #[test]
+    fn test_hp_healing_u16overflow() {
+        let mut hp = Hp {
+            total: u16::max_value(),
+            current: u16::max_value(),
+            hit_die: ToRoll::new(Dice::D10, 1),
+            state: HpStateEnum::Alive,
+        };
+        hp.heal(1);
+        assert_eq!(hp.current(), hp.total());
+    }
 }
