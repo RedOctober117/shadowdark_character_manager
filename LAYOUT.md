@@ -105,8 +105,6 @@ player:
             slots: u8
             occupied_slots: u8,
             talents: []Talent,
-
-
 ```
 
 

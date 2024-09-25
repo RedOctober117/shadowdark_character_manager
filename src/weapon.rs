@@ -88,3 +88,10 @@ impl WeaponProperty {
         &self.description
     }
 }
+
+pub enum WeaponTypeEnum {
+    Club,
+    Crossbow,
+    Mace,
+    LongSword,
+}

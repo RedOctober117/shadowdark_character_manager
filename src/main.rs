@@ -1,37 +1,46 @@
 use attributes::{AttributeEnum, AttributeModifier, Attributes};
+use db_connection::DBConnection;
+use rusqlite::{Connection, Result};
+use std::fs::File;
 
+pub mod abstract_inventory;
+pub mod ancestry;
 pub mod armour;
 pub mod attributes;
+pub mod class;
 pub mod currency;
+pub mod db_connection;
 pub mod dice;
 pub mod hp;
-pub mod inventory;
 pub mod item;
+pub mod language;
 pub mod talent;
 pub mod weapon;
 pub mod xp;
 
-pub fn main() {
-    let mut test_attributes = Attributes::new();
-    let mut modifier_1 = AttributeModifier::new(AttributeEnum::Strength, 1);
-    // let mut modifier_2 = AttributeModifier::new(Attrbiute::Strength, -5);
-    modifier_1.set_entry_index(test_attributes.add_attribute_modifier(&modifier_1));
-    // modifier_2.set_entry_index(test_attributes.add_attrbute_modifier(&modifier_2));
+pub fn main() -> Result<()> {
+    let db_path = "build.db3";
+    let script_path = "build.sqlite";
 
-    println!("{}", test_attributes.get_attribute(AttributeEnum::Strength));
+    let mut connection = DBConnection::connect(db_path);
 
-    test_attributes.remove_attribute_modifier(&modifier_1);
-    println!("{}", test_attributes.get_attribute(AttributeEnum::Strength));
+    connection.execute_script(script_path)?;
+
+    let results = connection.query_as_vec("SELECT * FROM stats_enum".to_string())?;
+
+    println!("{:?}", results);
+
+    Ok(())
 }
 
 #[cfg(test)]
 mod tests {
+    use abstract_inventory::AbstractInventory;
     use currency::Currency;
     use dice::Dice;
     use dice::ToRoll;
     use hp::Hp;
     use hp::HpStateEnum;
-    use inventory::AbstractInventory;
     use item::Item;
     use xp::Xp;
 
