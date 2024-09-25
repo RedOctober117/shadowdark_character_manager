@@ -6,7 +6,7 @@ pub struct DBConnection<P>
 where
     P: AsRef<Path>,
 {
-    db_path: P,
+    _db_path: P,
     connection: Connection,
 }
 
@@ -18,7 +18,7 @@ impl<P: AsRef<Path> + Clone> DBConnection<P> {
         };
 
         Self {
-            db_path: path,
+            _db_path: path,
             connection: conn,
         }
     }
