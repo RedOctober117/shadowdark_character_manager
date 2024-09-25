@@ -1,7 +1,7 @@
 use attributes::AttributeModifier;
-use rusqlite::Result;
 
 pub mod abstract_inventory;
+
 pub mod ancestry;
 pub mod armour;
 pub mod attributes;
@@ -15,18 +15,7 @@ pub mod talent;
 pub mod weapon;
 pub mod xp;
 
-pub fn main() -> Result<()> {
-    let db_path = "build.db3";
-    let script_path = "build.sqlite";
-
-    // let mut connection = DBConnection::connect(db_path);
-
-    // connection.execute_script(script_path)?;
-
-    // println!("{:?}", results);
-
-    Ok(())
-}
+pub fn main() {}
 
 #[cfg(test)]
 mod tests {

@@ -131,7 +131,7 @@ dependencies = [
 name = "shadowdark"
 version = "0.1.0"
 dependencies = [
- "rusqlite",
+ "db_connection",
 ]
 
 [[package]]
