@@ -1,10 +1,10 @@
-use crate::{attributes::AttributeModifier, language::LanguageEnum};
+use crate::{attributes::StatModifier, language::LanguageEnum};
 
 pub struct Ancestry {
     name: String,
     description: String,
     languages: Vec<LanguageEnum>,
-    modifiers: Vec<AttributeModifier>,
+    modifiers: Vec<StatModifier>,
 }
 
 impl Ancestry {
@@ -29,7 +29,7 @@ impl Ancestry {
         &self.languages
     }
 
-    pub fn modifiers(&self) -> &Vec<AttributeModifier> {
+    pub fn modifiers(&self) -> &Vec<StatModifier> {
         &self.modifiers
     }
 
@@ -37,7 +37,7 @@ impl Ancestry {
         self.languages.push(language);
     }
 
-    pub fn add_modifier(&mut self, modifier: AttributeModifier) {
+    pub fn add_modifier(&mut self, modifier: StatModifier) {
         self.modifiers.push(modifier);
     }
 }

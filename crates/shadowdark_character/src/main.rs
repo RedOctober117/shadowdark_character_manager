@@ -1,4 +1,4 @@
-use attributes::AttributeModifier;
+use attributes::StatModifier;
 use db_connection::db_connection::DBConnection;
 
 pub mod abstract_inventory;
@@ -28,7 +28,7 @@ pub fn main() {
 #[cfg(test)]
 mod tests {
     use abstract_inventory::AbstractInventory;
-    use attributes::{AttributeEnum, Attributes};
+    use attributes::{StatEnum, Stats};
     use currency::Currency;
     use dice::Dice;
     use dice::ToRoll;
@@ -41,63 +41,57 @@ mod tests {
 
     #[test]
     fn test_add_attributes() {
-        let mut test_matrix = Attributes::new();
+        let mut test_matrix = Stats::new();
         let modifiers = vec![
-            AttributeModifier::new(AttributeEnum::Strength, 10),
-            AttributeModifier::new(AttributeEnum::Dexterity, 1),
-            AttributeModifier::new(AttributeEnum::Charisma, 1),
-            AttributeModifier::new(AttributeEnum::Intelligence, 1),
-            AttributeModifier::new(AttributeEnum::Wisdom, 1),
-            AttributeModifier::new(AttributeEnum::Constitution, 1),
+            StatModifier::new(StatEnum::Strength, 10),
+            StatModifier::new(StatEnum::Dexterity, 1),
+            StatModifier::new(StatEnum::Charisma, 1),
+            StatModifier::new(StatEnum::Intelligence, 1),
+            StatModifier::new(StatEnum::Wisdom, 1),
+            StatModifier::new(StatEnum::Constitution, 1),
         ];
 
         for m in modifiers {
-            test_matrix.add_attribute_modifier(&m);
+            test_matrix.add_stat_modifier(&m);
         }
 
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Strength), 10);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Dexterity), 1);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Charisma), 1);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Intelligence), 1);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Wisdom), 1);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Constitution), 1);
+        assert_eq!(test_matrix.get_stat(StatEnum::Strength), 10);
+        assert_eq!(test_matrix.get_stat(StatEnum::Dexterity), 1);
+        assert_eq!(test_matrix.get_stat(StatEnum::Charisma), 1);
+        assert_eq!(test_matrix.get_stat(StatEnum::Intelligence), 1);
+        assert_eq!(test_matrix.get_stat(StatEnum::Wisdom), 1);
+        assert_eq!(test_matrix.get_stat(StatEnum::Constitution), 1);
 
-        assert_eq!(
-            test_matrix.get_attribute_modifier(AttributeEnum::Strength),
-            0
-        );
-        assert_eq!(
-            test_matrix.get_attribute_modifier(AttributeEnum::Constitution),
-            -4
-        );
+        assert_eq!(test_matrix.get_stat_modifier(StatEnum::Strength), 0);
+        assert_eq!(test_matrix.get_stat_modifier(StatEnum::Constitution), -4);
     }
 
     #[test]
     fn test_remove_attributes() {
-        let mut test_matrix = Attributes::new();
+        let mut test_matrix = Stats::new();
         let mut modifiers = vec![
-            AttributeModifier::new(AttributeEnum::Strength, 1),
-            AttributeModifier::new(AttributeEnum::Dexterity, 1),
-            AttributeModifier::new(AttributeEnum::Charisma, 1),
-            AttributeModifier::new(AttributeEnum::Intelligence, 1),
-            AttributeModifier::new(AttributeEnum::Wisdom, 1),
-            AttributeModifier::new(AttributeEnum::Constitution, 1),
+            StatModifier::new(StatEnum::Strength, 1),
+            StatModifier::new(StatEnum::Dexterity, 1),
+            StatModifier::new(StatEnum::Charisma, 1),
+            StatModifier::new(StatEnum::Intelligence, 1),
+            StatModifier::new(StatEnum::Wisdom, 1),
+            StatModifier::new(StatEnum::Constitution, 1),
         ];
 
         for m in &mut modifiers {
-            m.set_entry_index(test_matrix.add_attribute_modifier(m));
+            m.set_entry_index(test_matrix.add_stat_modifier(m));
         }
 
         for m in modifiers {
-            test_matrix.remove_attribute_modifier(&m);
+            test_matrix.remove_stat_modifier(&m);
         }
 
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Strength), 0);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Dexterity), 0);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Charisma), 0);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Intelligence), 0);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Wisdom), 0);
-        assert_eq!(test_matrix.get_attribute(AttributeEnum::Constitution), 0);
+        assert_eq!(test_matrix.get_stat(StatEnum::Strength), 0);
+        assert_eq!(test_matrix.get_stat(StatEnum::Dexterity), 0);
+        assert_eq!(test_matrix.get_stat(StatEnum::Charisma), 0);
+        assert_eq!(test_matrix.get_stat(StatEnum::Intelligence), 0);
+        assert_eq!(test_matrix.get_stat(StatEnum::Wisdom), 0);
+        assert_eq!(test_matrix.get_stat(StatEnum::Constitution), 0);
     }
 
     #[test]
