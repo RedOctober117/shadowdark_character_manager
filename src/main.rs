@@ -13,6 +13,7 @@ pub mod dice;
 pub mod hp;
 pub mod item;
 pub mod language;
+pub mod queryable;
 pub mod talent;
 pub mod weapon;
 pub mod xp;
@@ -25,9 +26,7 @@ pub fn main() -> Result<()> {
 
     connection.execute_script(script_path)?;
 
-    let results = connection.query_as_vec("SELECT * FROM stats_enum".to_string())?;
-
-    println!("{:?}", results);
+    // println!("{:?}", results);
 
     Ok(())
 }

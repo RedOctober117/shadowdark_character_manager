@@ -1,4 +1,8 @@
+DROP TABLE IF EXISTS stats_enum;
 -- Stat modifier calculation can be done on the client end.
+DROP TABLE IF EXISTS stats_enum;
+DROP TABLE IF EXISTS player_stats;
+
 CREATE TABLE
     stats_enum (ID INTEGER PRIMARY KEY, stat VARCHAR(15) UNIQUE);
 
@@ -19,8 +23,3 @@ VALUES
     ('Intelligence'),
     ('Wisdom'),
     ('Charisma');
-
-SELECT
-    *
-FROM
-    stats_enum;

@@ -1,4 +1,5 @@
-use rusqlite::{Connection, Result};
+use rusqlite::types::FromSql;
+use rusqlite::{Connection, Params, Result};
 use std::path::Path;
 use std::{fs::File, io::Read};
 
@@ -23,7 +24,7 @@ impl<P: AsRef<Path> + Clone> DBConnection<P> {
         }
     }
 
-    pub fn execute_script(&mut self, script_path: P) -> Result<usize> {
+    pub fn execute_script(&mut self, script_path: P) -> Result<()> {
         let mut script_buffer = String::new();
         let file = File::open(script_path);
 
@@ -32,28 +33,6 @@ impl<P: AsRef<Path> + Clone> DBConnection<P> {
             Err(e) => panic!("Could not open script {}", e),
         }
 
-        let chars: Vec<_> = script_buffer.char_indices().collect();
-
-        for (index, char) in chars {
-            match char {
-                '\n' | '\r' => _ = script_buffer.remove(index),
-                _ => continue,
-            }
-        }
-
-        let mut statement = self.connection.prepare(&script_buffer)?;
-        statement.execute(())
-    }
-
-    pub fn query_as_vec(&mut self, query: String) -> Result<Vec<String>> {
-        let mut results: Vec<String> = vec![];
-        let mut statement = self.connection.prepare(&query)?;
-
-        let _ = statement.query_map([], |row| {
-            results.push(format!("{:?}", *row));
-            Ok(())
-        })?;
-
-        Ok(results)
+        self.connection.execute_batch(&script_buffer)
     }
 }
