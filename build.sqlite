@@ -1,23 +1,41 @@
 DROP TABLE IF EXISTS stats_enum;
--- Stat modifier calculation can be done on the client end.
 DROP TABLE IF EXISTS stats_enum;
 DROP TABLE IF EXISTS player_stats;
-
-CREATE TABLE
-    stats_enum (ID INTEGER PRIMARY KEY, stat VARCHAR(15) UNIQUE);
-
-CREATE TABLE
-    player_stats (
-        player_id INTEGER,
-        stat_id INTEGER,
-        value INTEGER,
-        CONSTRAINT composite_key PRIMARY KEY (player_id, stat_id)
-    );
-
-INSERT INTO
-    stats_enum (stat)
-VALUES
-    ('Strength'),
+CREATE TABLE stats_enum (ID INTEGER PRIMARY KEY, stat VARCHAR(15) UNIQUE);
+CREATE TABLE class;
+CREATE TABLE ancestry;
+CREATE TABLE ancestry;
+CREATE TABLE background;
+CREATE TABLE title;
+CREATE TABLE alignment;
+CREATE TABLE deity;
+-- FINAL
+CREATE TABLE player_stats (
+    player_id INTEGER,
+    stat_id INTEGER,
+    value INTEGER,
+    CONSTRAINT composite_key PRIMARY KEY (player_id, stat_id)
+);
+CREATE TABLE player (
+    ID INTEGER PRIMARY KEY,
+    player_name VARCHAR(255)
+);
+CREATE TABLE stat_modifier (
+    ID INTEGER PRIMARY KEY,
+    player_id INTEGER,
+    stat_id INTEGER,
+    modifier INTEGER,
+    FOREIGN KEY (player_id) REFERENCES player(ID),
+    FOREIGN KEY (stat_id) REFERENCES stats_enum(ID),
+);
+CREATE TABLE stat_modifiers (
+    player_id INTEGER,
+    modifier_id INTEGER,
+    FOREIGN KEY (player_id) REFERENCES player(ID),
+    FOREIGN KEY (modifier_id) REFERENCES stat_modifier(ID),
+);
+INSERT INTO stats_enum (stat)
+VALUES ('Strength'),
     ('Dexterity'),
     ('Constitution'),
     ('Intelligence'),

@@ -93,11 +93,11 @@ impl Default for Stats {
 /// are summed when calculating the total for a given attribute.
 /// # Examples
 /// ```
-/// let mut player_attributes = Attributes::new();
-/// let mut new_attribute = AttributeModifier::new(AttributeEnum::Strength, 1);
-/// new_attribute.set_entry_index(player_attributes.add_addribute_modifier(&new_attribute));
+/// let mut player_stats = Stats::new();
+/// let mut new_stat = StatModifier::new(StatEnum::Strength, 1);
+/// new_stat.set_entry_index(player_stats.add_stat_modifier(&new_attribute));
 ///
-/// assert_eq!(player_attributes.get_attribute(Attrbiute::Strength), 1);
+/// assert_eq!(player_stats.get_stat(StatEnum::Strength), 1);
 /// ```
 #[derive(Copy, Clone, Debug)]
 pub struct StatModifier {
