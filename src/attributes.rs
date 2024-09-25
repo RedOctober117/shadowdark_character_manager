@@ -128,3 +128,70 @@ impl AttributeModifier {
         self.entry_index = Some(index);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_attributes() {
+        let mut test_matrix = Attributes::new();
+        let modifiers = vec![
+            AttributeModifier::new(AttributeEnum::Strength, 10),
+            AttributeModifier::new(AttributeEnum::Dexterity, 1),
+            AttributeModifier::new(AttributeEnum::Charisma, 1),
+            AttributeModifier::new(AttributeEnum::Intelligence, 1),
+            AttributeModifier::new(AttributeEnum::Wisdom, 1),
+            AttributeModifier::new(AttributeEnum::Constitution, 1),
+        ];
+
+        for m in modifiers {
+            test_matrix.add_attribute_modifier(&m);
+        }
+
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Strength), 10);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Dexterity), 1);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Charisma), 1);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Intelligence), 1);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Wisdom), 1);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Constitution), 1);
+
+        assert_eq!(
+            test_matrix.get_attribute_modifier(AttributeEnum::Strength),
+            0
+        );
+        assert_eq!(
+            test_matrix.get_attribute_modifier(AttributeEnum::Constitution),
+            -4
+        );
+    }
+
+    #[test]
+    fn test_remove_attributes() {
+        let mut test_matrix = Attributes::new();
+        let mut modifiers = vec![
+            AttributeModifier::new(AttributeEnum::Strength, 1),
+            AttributeModifier::new(AttributeEnum::Dexterity, 1),
+            AttributeModifier::new(AttributeEnum::Charisma, 1),
+            AttributeModifier::new(AttributeEnum::Intelligence, 1),
+            AttributeModifier::new(AttributeEnum::Wisdom, 1),
+            AttributeModifier::new(AttributeEnum::Constitution, 1),
+        ];
+
+        for m in &mut modifiers {
+            m.set_entry_index(test_matrix.add_attribute_modifier(m));
+        }
+
+        for m in modifiers {
+            test_matrix.remove_attribute_modifier(&m);
+        }
+
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Strength), 0);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Dexterity), 0);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Charisma), 0);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Intelligence), 0);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Wisdom), 0);
+        assert_eq!(test_matrix.get_attribute(AttributeEnum::Constitution), 0);
+    }
+
+}

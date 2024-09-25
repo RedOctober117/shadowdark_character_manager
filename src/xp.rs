@@ -36,3 +36,28 @@ impl Xp {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_xp() {
+        let mut test_xp = Xp::new(1);
+        test_xp.add_xp(5);
+
+        assert_eq!(test_xp.current_xp(), 5);
+        assert_eq!(test_xp.lifetime_xp(), 5);
+        assert_eq!(test_xp.level(), 1);
+    }
+
+    #[test]
+    fn test_level_up() {
+        let mut test_xp = Xp::new(1);
+        test_xp.add_xp(30);
+
+        assert_eq!(test_xp.current_xp(), 0);
+        assert_eq!(test_xp.lifetime_xp(), 30);
+        assert_eq!(test_xp.level(), 2);
+    }
+}

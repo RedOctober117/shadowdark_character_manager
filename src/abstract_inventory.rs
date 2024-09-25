@@ -66,3 +66,45 @@ impl fmt::Display for InventoryIsFullError {
         write!(f, "inventory is full!")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::item::Item;
+    use crate::currency::{Currency, CurrencyEnum};
+
+    #[test]
+    fn test_new_inventory() {
+        let test_inv: AbstractInventory<Item> = AbstractInventory::new(1);
+        assert_eq!(test_inv.used_slots(), 0);
+        assert_eq!(test_inv.free_slots(), 1);
+        assert_eq!(test_inv.capacity(), 1);
+    }
+
+    #[test]
+    fn test_add_item_to_inv() {
+        let mut test_inv: AbstractInventory<Item> = AbstractInventory::new(2);
+        let item_1 = Item::new(
+            String::from("item_1"),
+            Currency::new(1, CurrencyEnum::GP),
+            1,
+        );
+
+        assert!(test_inv.add_item(item_1).is_ok());
+        assert_eq!(test_inv.free_slots(), 1);
+    }
+
+    #[test]
+    fn test_overfill_inv() {
+        let mut test_inv: AbstractInventory<Item> = AbstractInventory::new(2);
+        let item_1 = Item::new(
+            String::from("item_1"),
+            Currency::new(1, CurrencyEnum::GP),
+            3,
+        );
+
+        if test_inv.add_item(item_1).is_ok() {
+            panic!()
+        }
+    }
+}
