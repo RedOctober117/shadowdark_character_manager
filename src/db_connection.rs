@@ -1,5 +1,4 @@
-use rusqlite::types::FromSql;
-use rusqlite::{Connection, Params, Result};
+use rusqlite::{Connection, Result};
 use std::path::Path;
 use std::{fs::File, io::Read};
 
