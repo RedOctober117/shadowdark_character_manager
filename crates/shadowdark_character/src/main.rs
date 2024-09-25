@@ -1,4 +1,5 @@
 use attributes::AttributeModifier;
+use db_connection::db_connection::DBConnection;
 
 pub mod abstract_inventory;
 
@@ -15,7 +16,14 @@ pub mod talent;
 pub mod weapon;
 pub mod xp;
 
-pub fn main() {}
+pub fn main() {
+    let path = "db.db3";
+    let mut conn = DBConnection::connect(path);
+
+    if let Err(_) = conn.execute_script("build.sqlite") {
+        panic!("couldn't execute script");
+    }
+}
 
 #[cfg(test)]
 mod tests {
