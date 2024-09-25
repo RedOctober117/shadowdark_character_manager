@@ -1,7 +1,4 @@
 use rusqlite::{Connection, Result};
-use std::io::Seek;
-use std::ops::IndexMut;
-use std::os::windows::fs::FileExt;
 use std::path::Path;
 use std::{fs::File, io::Read};
 

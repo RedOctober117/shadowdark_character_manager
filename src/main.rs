@@ -1,7 +1,6 @@
-use attributes::{AttributeEnum, AttributeModifier, Attributes};
+use attributes::AttributeModifier;
 use db_connection::DBConnection;
-use rusqlite::{Connection, Result};
-use std::fs::File;
+use rusqlite::Result;
 
 pub mod abstract_inventory;
 pub mod ancestry;
@@ -36,6 +35,7 @@ pub fn main() -> Result<()> {
 #[cfg(test)]
 mod tests {
     use abstract_inventory::AbstractInventory;
+    use attributes::{AttributeEnum, Attributes};
     use currency::Currency;
     use dice::Dice;
     use dice::ToRoll;
