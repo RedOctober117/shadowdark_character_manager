@@ -3,7 +3,44 @@ DROP TABLE IF EXISTS stats_enum;
 DROP TABLE IF EXISTS player_stats;
 CREATE TABLE stats_enum (ID INTEGER PRIMARY KEY, stat VARCHAR(15) UNIQUE);
 CREATE TABLE class;
-CREATE TABLE ancestry;
+-- START ANECSTRY
+-- use default values to make a column reference stat modifiers
+CREATE TABLE ancestry (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE,
+);
+CREATE TABLE languages (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE,
+);
+CREATE TABLE ancestry_known_language (
+    ancestry_id INTEGER,
+    language_id INTEGER,
+    FOREIGN KEY (ancestry_id) REFERENCES ancestry(ID),
+    FOREIGN KEY (language_id) REFERENCES languages(ID),
+    CONSTRAINT composite_key PRIMARY KEY (ancestry_id, language_id),
+);
+CREATE TABLE ancestry_talent (
+    ancestry_id INTEGER,
+    talent_id INTEGER,
+    FOREIGN KEY (ancestry_id) REFERENCES ancestry(ID),
+    FOREIGN KEY (talent_id) REFERENCES talent(ID),
+    CONSTRAINT composite_key REFERENCES (ancestry_id, talent_id),
+);
+CREATE TABLE ancestry_description (
+    ancestry_id INTEGER PRIMARY KEY,
+    description VARCHAR(5000),
+    FOREIGN KEY (ancestry_id) REFERENCES ancestry(ID),
+);
+-- END ANCESTRY
+-- START TALENT
+CREATE TABLE talent (ID INTEGER PRIMARY KEY AUTOINCREMENT);
+CREATE TABLE talent_stat_modifier (
+    talent_id INTEGER,
+    stat_id INTEGER,
+    value
+);
+-- END TALENT
 CREATE TABLE ancestry;
 CREATE TABLE background;
 CREATE TABLE title;
@@ -17,11 +54,11 @@ CREATE TABLE player_stats (
     CONSTRAINT composite_key PRIMARY KEY (player_id, stat_id)
 );
 CREATE TABLE player (
-    ID INTEGER PRIMARY KEY,
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
     player_name VARCHAR(255)
 );
 CREATE TABLE stat_modifier (
-    ID INTEGER PRIMARY KEY,
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
     player_id INTEGER,
     stat_id INTEGER,
     modifier INTEGER,
