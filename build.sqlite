@@ -1,3 +1,5 @@
+-- Items that won't change: make enum and put id & name in single table
+-- Items that can change: id in one table, name in another
 DROP TABLE IF EXISTS stats_enum;
 DROP TABLE IF EXISTS stats_enum;
 DROP TABLE IF EXISTS player_stats;
@@ -39,6 +41,32 @@ CREATE TABLE talent_stat_modifier (
     talent_id INTEGER,
     stat_id INTEGER,
     value
+);
+CREATE TABLE talent_hp_modifier (
+    talent_id INTEGER FK,
+    player_id INTEGER FK,
+    modifier INTEGER,
+);
+CREATE TABLE talent_attack_modifier (
+    talent_id INTEGER FK,
+    player_id INTEGER FK,
+    modifier INTEGER
+);
+CREATE TABLE talent_damage_modifier (
+    talent_id INTEGER FK,
+    player_id INTEGER FK,
+    modifier INTEGER,
+);
+CREATE TABLE talent_ac_modifier (
+    talent_id INTEGER FK,
+    player_id INTEGER FK,
+    modifier INTEGER,
+);
+CREATE TABLE talent_ability_modifier (
+    talent_id INTEGER FK,
+    player_id INTEGER FK,
+    ability_id INTEGER FK,
+    modifier ? ? ? ?
 );
 -- END TALENT
 CREATE TABLE ancestry;
