@@ -1,17 +1,17 @@
-use attributes::StatModifier;
 use db_connection::db_connection::DBConnection;
+use stats::StatModifier;
 
 pub mod abstract_inventory;
 
 pub mod ancestry;
 pub mod armour;
-pub mod attributes;
 pub mod class;
 pub mod currency;
 pub mod dice;
 pub mod hp;
 pub mod item;
 pub mod language;
+pub mod stats;
 pub mod talent;
 pub mod weapon;
 pub mod xp;
@@ -28,13 +28,13 @@ pub fn main() {
 #[cfg(test)]
 mod tests {
     use abstract_inventory::AbstractInventory;
-    use attributes::{StatEnum, Stats};
     use currency::Currency;
     use dice::Dice;
     use dice::ToRoll;
     use hp::Hp;
     use hp::HpStateEnum;
     use item::Item;
+    use stats::{StatEnum, Stats};
     use xp::Xp;
 
     use super::*;

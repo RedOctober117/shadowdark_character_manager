@@ -1,4 +1,4 @@
-use crate::{attributes::StatModifier, language::LanguageEnum};
+use crate::{language::LanguageEnum, stats::StatModifier};
 
 pub struct Ancestry {
     name: String,
