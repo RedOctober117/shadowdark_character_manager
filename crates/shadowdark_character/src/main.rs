@@ -20,8 +20,8 @@ pub fn main() {
     let path = "db.db3";
     let mut conn = DBConnection::connect(path);
 
-    if let Err(_) = conn.execute_script("build.sqlite") {
-        panic!("couldn't execute script");
+    if let Err(e) = conn.execute_script("build.sqlite") {
+        panic!("couldn't execute script: {e}");
     }
 }
 
