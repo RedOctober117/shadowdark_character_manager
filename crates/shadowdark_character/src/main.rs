@@ -1,5 +1,8 @@
-use db_connection::db_connection::DBConnection;
+use std::io::Write;
+
+use db_connection::{db_connection::DBConnection, queryable::Queryable};
 use stats::StatModifier;
+use talent::Talent;
 
 pub mod abstract_inventory;
 
@@ -18,10 +21,49 @@ pub mod xp;
 
 pub fn main() {
     let path = "db.db3";
-    let mut conn = DBConnection::connect(path);
+    let mut conn = DBConnection::connect(path.into());
 
-    if let Err(e) = conn.execute_script("build.sqlite") {
-        panic!("couldn't execute script: {e}");
+    print!("Flash database? (y/n) ");
+    loop {
+        let mut user_input = String::new();
+
+        std::io::stdout().flush().unwrap();
+        std::io::stdin().read_line(&mut user_input).unwrap();
+
+        match user_input.trim() {
+            "y" => {
+                if let Err(e) = conn.execute_script("build.sqlite".into()) {
+                    panic!("couldn't execute script: {e}");
+                }
+                break;
+            }
+            "n" => break,
+            _ => {
+                print!("Invalid input. ");
+                continue;
+            }
+        }
+    }
+
+    talent::Talent::insert(&mut conn, Talent::new("test_description".into())).unwrap();
+
+    if let Ok(vec) = talent::Talent::select_all(&mut conn) {
+        for talent in vec {
+            println!("{:?}", talent);
+        }
+    }
+
+    Talent::execute(
+        &mut conn,
+        "DELETE FROM talent WHERE description = ?1",
+        "test_description",
+    )
+    .unwrap();
+
+    if let Ok(vec) = talent::Talent::select_all(&mut conn) {
+        for talent in vec {
+            println!("{:?}", talent);
+        }
     }
 }
 

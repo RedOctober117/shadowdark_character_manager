@@ -9,11 +9,9 @@ CREATE TABLE languages (
     name VARCHAR(255) UNIQUE
 );
 -- START TALENT
-CREATE TABLE talent (ID INTEGER PRIMARY KEY AUTOINCREMENT);
-CREATE TABLE talent_description (
-    talent_id INTEGER PRIMARY KEY,
-    description VARCHAR(5000),
-    FOREIGN KEY (talent_id) REFERENCES talent (ID)
+CREATE TABLE talent (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    description VARCHAR(5000)
 );
 -- END TALENT
 -- START ANECSTRY
@@ -170,6 +168,10 @@ VALUES ('Strength'),
     ('Intelligence'),
     ('Wisdom'),
     ('Charisma');
+INSERT INTO talent (description)
+VALUES (
+        "Gain Weapon Mastery with one additional weapon type"
+    );
 -- CREATE TABLE talent_stat_modifier (
 --     talent_id INTEGER,
 --     stat_id INTEGER,
