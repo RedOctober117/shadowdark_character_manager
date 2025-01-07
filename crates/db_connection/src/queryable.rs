@@ -1,5 +1,4 @@
-use rusqlite::{Params, Result};
-use std::path::Path;
+use rusqlite::Result;
 
 use crate::db_connection::DBConnection;
 

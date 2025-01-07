@@ -1,9 +1,6 @@
-// use crate::StatModifier;
-
 use db_connection::db_connection::DBConnection;
 use db_connection::queryable::Queryable;
-use rusqlite::{params, Params, Result};
-use std::path::Path;
+use rusqlite::{params, Result};
 
 /// Represents a Talent. This will eventually be abstracted to include weapon
 /// and armour properties as well.
