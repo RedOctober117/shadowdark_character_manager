@@ -1,29 +1,25 @@
 use rusqlite::{Connection, Result};
-use std::path::Path;
 use std::{fs::File, io::Read};
 
-pub struct DBConnection<P>
-where
-    P: AsRef<Path>,
-{
-    _db_path: P,
+pub struct DBConnection {
+    db_path: String,
     connection: Connection,
 }
 
-impl<P: AsRef<Path> + Clone> DBConnection<P> {
-    pub fn connect(path: P) -> Self {
+impl DBConnection {
+    pub fn connect(path: String) -> Self {
         let conn = match Connection::open(path.clone()) {
             Ok(conn) => conn,
             Err(e) => panic!("Could not open database: {}", e),
         };
 
         Self {
-            _db_path: path,
+            db_path: path,
             connection: conn,
         }
     }
 
-    pub fn execute_script(&mut self, script_path: P) -> Result<()> {
+    pub fn execute_script(&mut self, script_path: String) -> Result<()> {
         let mut script_buffer = String::new();
         let file = File::open(script_path);
 
@@ -33,5 +29,9 @@ impl<P: AsRef<Path> + Clone> DBConnection<P> {
         }
 
         self.connection.execute_batch(&script_buffer)
+    }
+
+    pub fn mut_conn(&mut self) -> &mut Connection {
+        &mut self.connection
     }
 }

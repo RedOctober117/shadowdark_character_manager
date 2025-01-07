@@ -1,25 +1,206 @@
-DROP TABLE IF EXISTS stats_enum;
--- Stat modifier calculation can be done on the client end.
+-- Items that won't change: make enum and put id & name in single table
+-- Items that can change: id in one table, name in another
 DROP TABLE IF EXISTS stats_enum;
 DROP TABLE IF EXISTS player_stats;
-
-CREATE TABLE
-    stats_enum (ID INTEGER PRIMARY KEY, stat VARCHAR(15) UNIQUE);
-
-CREATE TABLE
-    player_stats (
-        player_id INTEGER,
-        stat_id INTEGER,
-        value INTEGER,
-        CONSTRAINT composite_key PRIMARY KEY (player_id, stat_id)
-    );
-
-INSERT INTO
-    stats_enum (stat)
-VALUES
-    ('Strength'),
+CREATE TABLE stats_enum (ID INTEGER PRIMARY KEY, stat VARCHAR(15) UNIQUE);
+CREATE TABLE class (ID INTEGER PRIMARY KEY);
+CREATE TABLE languages (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE
+);
+-- START TALENT
+CREATE TABLE talent (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    description VARCHAR(5000)
+);
+-- END TALENT
+-- START ANECSTRY
+-- use default values to make a column reference stat modifiers
+CREATE TABLE ancestry (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE
+);
+CREATE TABLE ancestry_known_language (
+    ancestry_id INTEGER,
+    language_id INTEGER,
+    FOREIGN KEY (ancestry_id) REFERENCES ancestry (ID),
+    FOREIGN KEY (language_id) REFERENCES languages (ID),
+    CONSTRAINT composite_key PRIMARY KEY (ancestry_id, language_id)
+);
+CREATE TABLE ancestry_talent (
+    ancestry_id INTEGER,
+    talent_id INTEGER,
+    FOREIGN KEY (ancestry_id) REFERENCES ancestry (ID),
+    FOREIGN KEY (talent_id) REFERENCES talent (ID),
+    CONSTRAINT composite_key PRIMARY KEY (ancestry_id, talent_id)
+);
+CREATE TABLE ancestry_description (
+    ancestry_id INTEGER PRIMARY KEY,
+    description VARCHAR(5000),
+    FOREIGN KEY (ancestry_id) REFERENCES ancestry (ID)
+);
+-- END ANCESTRY
+-- START CURRENCY
+CREATE TABLE currency (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255)
+);
+CREATE TABLE currency_value (
+    currency_id INTEGER PRIMARY KEY,
+    currency_value INTEGER,
+    FOREIGN KEY (currency_id) REFERENCES currency (ID)
+);
+-- END CURRENCY
+-- START ARMOUR
+CREATE TABLE armour (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255)
+);
+CREATE TABLE armour_cost_currency (
+    armour_id INTEGER,
+    currency_id INTEGER,
+    FOREIGN KEY (armour_id) REFERENCES armour (ID),
+    FOREIGN KEY (currency_id) REFERENCES currency (ID),
+    CONSTRAINT composite_key PRIMARY KEY (armour_id, currency_id)
+);
+-- CREATE TABLE armour_cost_currency_count (
+--     armour_cost_currency_id INTEGER,
+--     count INTEGER
+-- );
+CREATE TABLE armour_slot_size (
+    armour_id INTEGER PRIMARY KEY,
+    slot_size INTEGER,
+    FOREIGN KEY (armour_id) REFERENCES armour (ID)
+);
+CREATE TABLE armour_ac (
+    armour_id INTEGER PRIMARY KEY,
+    ac INTEGER,
+    FOREIGN KEY (armour_id) REFERENCES armour (ID)
+);
+CREATE TABLE armour_talent (
+    armour_id INTEGER,
+    talent_id INTEGER,
+    FOREIGN KEY (armour_id) REFERENCES armour (ID),
+    FOREIGN KEY (talent_id) REFERENCES talent (ID),
+    CONSTRAINT composite_key PRIMARY KEY (armour_id, talent_id)
+);
+-- END ARMOUR
+-- START BACKGROUND
+CREATE TABLE background (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE
+);
+CREATE TABLE background_description (
+    background_id INTEGER PRIMARY KEY,
+    description VARCHAR(5000),
+    FOREIGN KEY (background_id) REFERENCES background (ID)
+);
+-- END BACKGROUND
+-- START ALIGNMENT
+CREATE TABLE alignment (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE
+);
+-- END ALIGNMENT
+-- START TITLE
+CREATE TABLE title (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE
+);
+CREATE TABLE title_level_unlock (
+    title_id INTEGER PRIMARY KEY,
+    level INTEGER,
+    FOREIGN KEY (title_id) REFERENCES title (ID)
+);
+CREATE TABLE title_alignment (
+    title_id INTEGER PRIMARY KEY,
+    alignment_id INTEGER,
+    FOREIGN KEY (title_id) REFERENCES title (ID),
+    FOREIGN KEY (alignment_id) REFERENCES alignment (ID)
+);
+-- END TITLE
+-- START DIETY
+CREATE TABLE diety (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) UNIQUE
+);
+CREATE TABLE diety_description (
+    diety_id INTEGER PRIMARY KEY,
+    description VARCHAR(5000),
+    FOREIGN KEY (diety_id) REFERENCES diety (ID)
+);
+CREATE TABLE diety_alignment (
+    diety_id INTEGER PRIMARY KEY,
+    alignment_id INTEGER,
+    FOREIGN KEY (diety_id) REFERENCES diety (ID),
+    FOREIGN KEY (alignment_id) REFERENCES alignment (ID)
+);
+-- END DIETY
+CREATE TABLE player_stats (
+    player_id INTEGER,
+    stat_id INTEGER,
+    value INTEGER,
+    CONSTRAINT composite_key PRIMARY KEY (player_id, stat_id)
+);
+CREATE TABLE player (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_name VARCHAR(255)
+);
+CREATE TABLE stat_modifier (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_id INTEGER,
+    stat_id INTEGER,
+    modifier INTEGER,
+    FOREIGN KEY (player_id) REFERENCES player(ID),
+    FOREIGN KEY (stat_id) REFERENCES stats_enum(ID)
+);
+CREATE TABLE stat_modifiers (
+    player_id INTEGER,
+    modifier_id INTEGER,
+    FOREIGN KEY (player_id) REFERENCES player(ID),
+    FOREIGN KEY (modifier_id) REFERENCES stat_modifier(ID)
+);
+-- FINAL
+INSERT INTO stats_enum (stat)
+VALUES ('Strength'),
     ('Dexterity'),
     ('Constitution'),
     ('Intelligence'),
     ('Wisdom'),
     ('Charisma');
+INSERT INTO talent (description)
+VALUES (
+        "Gain Weapon Mastery with one additional weapon type"
+    );
+-- CREATE TABLE talent_stat_modifier (
+--     talent_id INTEGER,
+--     stat_id INTEGER,
+--     value
+-- );
+-- CREATE TABLE talent_hp_modifier (
+--     talent_id INTEGER FK,
+--     player_id INTEGER FK,
+--     modifier INTEGER,
+-- );
+-- CREATE TABLE talent_attack_modifier (
+--     talent_id INTEGER FK,
+--     player_id INTEGER FK,
+--     modifier INTEGER
+-- );
+-- CREATE TABLE talent_damage_modifier (
+--     talent_id INTEGER FK,
+--     player_id INTEGER FK,
+--     modifier INTEGER,
+-- );
+-- CREATE TABLE talent_ac_modifier (
+--     talent_id INTEGER FK,
+--     player_id INTEGER FK,
+--     modifier INTEGER,
+-- );
+-- CREATE TABLE talent_ability_modifier (
+--     talent_id INTEGER FK,
+--     player_id INTEGER FK,
+--     ability_id INTEGER FK,
+--     modifier ? ? ? ?
+-- );
+-- END TALENT

@@ -1,0 +1,8 @@
+[package]
+name = "shadowdark"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+db_connection = {path = "../db_connection"}
+rusqlite = { version = "0.32.1", features = ["bundled"] }
