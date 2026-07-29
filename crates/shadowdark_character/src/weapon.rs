@@ -14,6 +14,8 @@ pub struct Weapon {
     slots: u8,
 
     range: RangeEnum,
+    // alias type
+    type_: WeaponTypeEnum,
     damage: Vec<ToRoll>,
     properties: Vec<WeaponProperty>,
 }
@@ -24,6 +26,7 @@ impl Weapon {
         cost: Currency,
         slots: u8,
         range: RangeEnum,
+        type_: WeaponTypeEnum,
         damage: Vec<ToRoll>,
         properties: Vec<WeaponProperty>,
     ) -> Self {
@@ -34,6 +37,7 @@ impl Weapon {
             range,
             damage,
             properties,
+            type_,
         }
     }
 
@@ -89,6 +93,7 @@ impl WeaponProperty {
     }
 }
 
+#[derive(Clone, Debug)]
 pub enum WeaponTypeEnum {
     Club,
     Crossbow,

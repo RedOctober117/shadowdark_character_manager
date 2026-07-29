@@ -1,0 +1,69 @@
+player_name = ""
+character_name = ""
+ancestry = ""
+class = ""
+level = 0
+xp = 0
+title = ""
+alignment = ""
+background = ""
+diety = ""
+
+hp = 0
+ac = 0
+
+[attributes]
+strength = 0
+dexterity = 0
+constitution = 0
+intelligence = 0
+wisdow = 0
+charisma = 0
+
+
+[[weapons]]
+name = "Bastard Sword"
+cost = { amount = 10, denomination = "GP" }
+type = "M"
+range = "C"
+damage = [{ die = "D8", times = 1 }, { die = "D10", times = 1 }]
+properties = { style = "Versatile", slots = 2 }
+
+[[weapons]]
+name = "Club"
+cost = { value = 5, currency = "CP" }
+type = "M"
+range = "C"
+damage = [{ die = "D4", times = 1 }]
+properties = {}
+
+[[talents]]
+from = "class::fighter::talents"
+description = "Gain Weapon Mastery with one additional weapon type"
+bonus.value = 1
+bonus.to = "weapon-mastery"
+bonus.when = "permanent"
+
+[[talents]]
+from = "class::fighter::talents"
+description = "+1 to melee and ranged attacks"
+bonus.value = 1
+bonus.to = ["melee", "ranged"]
+bonus.when = "attack"
+
+[[talents]]
+from = "ancestry::dwarf::stout"
+description = "Stout. Start with +2 HP. Roll hit points per level with advantage."
+bonus = [
+    { bonus = 2, to = "sheet::hp", when = "permanent" },
+    { bonus = "advantage", to = "sheet::hp", when = "sheet::state::level-up" },
+]
+
+[[talents]]
+from = "ancestry::halfling"
+description = "Stealthy. Once per day, you can become invisible for 3 rounds."
+bonus.value = "invisible"
+bonus.to = "self"
+bonus.for = { rounds = 3 }
+bonus.limit = { of = 1, per = "day" }
+# or for.rounds = 3, but lets keep it explicit for now

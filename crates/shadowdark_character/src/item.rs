@@ -39,7 +39,10 @@ impl AbstractItem for Item {
 /// Enumerates the ranges in Shadowdark.
 #[derive(Clone, Copy, Debug)]
 pub enum RangeEnum {
+    // alias C
     Close,
+    // alias N
     Near,
+    // alias F
     Far,
 }

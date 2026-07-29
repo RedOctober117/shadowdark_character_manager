@@ -121,3 +121,50 @@ player:
 11..20
 15..20
 19..20
+
+# New section
+
+Character sheet key words:
+ - name
+ - ancestry
+ - class
+ - level
+ - xp
+ - alignment 
+ - diety
+ - title
+ - background
+ - stats::stat
+ - hp
+ - ac
+ - attacks
+ - talents
+ - spells
+ - gear
+
+Character sheet states:
+ - play
+ - level-up
+ - dying
+ - sneaking??
+
+Passing of time:
+ - day
+ - night
+
+Actions:
+ - roll
+    - attack
+    - damage
+    - check
+      - spellcasting
+
+## Calculated fields
+
+ - ac
+
+With base inherent value:
+ - all stats
+ - weapon attack/damage
+ - spell attack/damage
+ - carry slots

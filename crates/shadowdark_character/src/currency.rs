@@ -2,8 +2,8 @@
 /// formatting of currency. No math is supported yet.
 #[derive(Clone, Copy, Debug)]
 pub struct Currency {
-    denomination: CurrencyEnum,
     amount: u32,
+    denomination: CurrencyEnum,
 }
 
 impl Currency {
