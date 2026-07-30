@@ -17,16 +17,16 @@ armor-class = 0
 
 [[languages]]
 name = "Common"
-identity = "core::ancestry::half-orc::language::common"
+source = "core::ancestry::half-orc::language::common"
 
 [[languages]]
 name = "Orcish"
-identity = "core::ancestry::half-orc::language::orchish"
+source = "core::ancestry::half-orc::language::orchish"
 
 [[languages]]
 name = "Celestial"
-identity = "core::language::celestial"
-from = "sheet::talents::Languages::0"  # arrays index at 0?
+source = "core::language::celestial"
+from-talent = "sheet::talents::Languages::0" # arrays index at 0?
 
 [stats]
 strength = 16
@@ -39,20 +39,21 @@ charisma = 12
 # available slots = str or 10, whichever is highest
 [[gear]]
 name = "Chainmail"
-identity = "core::armor::chainmail"
+identity = "?"
+source = "core::armor::chainmail"
 slots = 2
 cost = { unit = "gp", value = 60 }
 bonus.value = { sum = [13, "sheet::stats::dexterity::modifier"] }
 bonus.to = "sheet::armor-class"
 properties = [
-    { bonus = "core::roll::disadvantage", to = "swim" },
-    { bonus = "core::roll::disadvantage", to = "stealth" },
+    { bonus.value = "core::roll::disadvantage", bonus.to = "swim" },
+    { bonus.value = "core::roll::disadvantage", bonus.to = "stealth" },
 ]
 amount = 1
 
 [[gear]]
 name = "Shield"
-identity = "core::armor::shield"
+source = "core::armor::shield"
 slots = 1
 cost = { value = 10, unit = "core::currency::gp" }
 bonus.value = 2
@@ -61,7 +62,7 @@ amount = 1
 
 [[gear]]
 name = "Longsword"
-identity = "core::weapons::longsword"
+source = "core::weapons::longsword"
 slots = 1
 cost = { value = 9, unit = "core::currency::gp" }
 type = "core::weapon::type::melee"
@@ -72,7 +73,7 @@ amount = 1
 
 [[gear]]
 name = "Crossbow"
-identity = "core::weapons::crossbow"
+source = "core::weapons::crossbow"
 slots = 1
 cost = { value = 8, unit = "core::currency::gp" }
 type = "core::weapon::type::range"
@@ -86,70 +87,70 @@ amount = 1
 
 [[gear]]
 name = "Bow bolts"
-identity = "core::gear::crossbow-bolts"
+source = "core::gear::crossbow-bolts"
 slots = 1
 cost = { value = 1, unit = "core::currency::gp" }
 amount = 20
 
 [[gear]]
 name = "Rations"
-identity = "core::gear::rations"
+source = "core::gear::rations"
 cost = { value = 5, unit = "core::currency::sp" }
 slots = 1
 amount = 3
 
 [[gear]]
 name = "Iron spikes"
-identity = "core::gear::iron-spikes"
+source = "core::gear::iron-spikes"
 cost = { value = 1, unit = "core::currency::gp" }
 slots = 1
 amount = 10
 
 [[gear]]
 name = "Grappling hook"
-identity = "core::gear::grappling-hook"
+source = "core::gear::grappling-hook"
 cost = { value = 1, unit = "core::currency::gp" }
 slots = 1
 amount = 1
 
 [[gear]]
 name = "Rope, 60'"
-identity = "core::gear::rope"
+source = "core::gear::rope"
 cost = { value = 1, unit = "core::currency::gp" }
 slots = 1
 amount = 1
 
 [[gear]]
 name = "Flint and steel"
-identity = "core::gear::flint-and-steel"
+source = "core::gear::flint-and-steel"
 cost = { value = 5, unit = "core::currency::sp" }
 slots = 1
 amount = 1
 
 [[gear]]
 name = "Torch"
-identity = "core::gear::torch"
+source = "core::gear::torch"
 cost = { value = 5, unit = "core::currency::sp" }
 slots = 1
 amount = 1
 
 [[gear]]
 name = "GP"
-identity = "core::currency::gp"
+source = "core::currency::gp"
 cost = { value = 1, unit = "core::currency::gp" }
 slots = { value = 1, free-to-carry = 100 }
 amount = 10
 
 [[gear]]
 name = "Backpack"
-identity = "core::gear::backpack"
+source = "core::gear::backpack"
 cost = { value = 2, unit = "core::currency::gp" }
 slots = { value = 1, free-to-carry = 1 }
 amount = 1
 
 [[gear]]
 name = "Holy Symbol"
-identity = "core::class::priest::deity::holy-symbol"
+source = "core::class::priest::deity::holy-symbol"
 cost = {}
 slots = 0
 amount = 1
@@ -157,7 +158,7 @@ amount = 1
 [[talents]]
 name = "Mighty"
 description = "You have a +1 bonus to attack and damage rolls with melee weapons."
-identity = "core::ancestry::half-orc::mighty"
+source = "core::ancestry::half-orc::mighty"
 bonus = { value = 1, to = [
     "core::weapon::melee",
     "core::weapon::ranged",
@@ -168,13 +169,13 @@ bonus = { value = 1, to = [
 
 [[talents]]
 description = "+1 to priest spellcasting checks"
-identity = "core::class::priest::talents"
+source = "core::class::priest::talents"
 bonus = { value = 1, to = "sheet::action::roll::check::spellcasting" }
 
 [[talents]]
 name = "Languages"
 description = "You know Celestial, Diabolic, or Primordial."
-identity = "core::class::priest::languages"
+source = "core::class::priest::languages"
 bonus.choose.amount = 1
 bonus.choose.from = [
     "core::language::celestial",
@@ -192,14 +193,14 @@ half your level (rounded down).
 One target you touch regains
 that many hit points.
 """
-identity = "core::spells::cure-wounds"
+source = "core::spells::cure-wounds"
 tier = 1
 caster = "core::class::priest"
 duration = "instant"
 range = "core::range::close"
 cast = { roll = [
     1,
-    { divide = "sheet::level", by = 2, round = "down" },
+    { calc.divide.value = "sheet::level", calc.divide.by = 2, calc.divide.round = "down" },
 ], d = 6 }
 
 [[spells]]
@@ -211,7 +212,7 @@ The weapon becomes magical
 and has +1 to attack and damage
 rolls for the duration.
 """
-identity = "core::spells::holy-weapon"
+source = "core::spells::holy-weapon"
 tier = 1
 caster = "core::class::priest"
 duration = { rounds = 5 }
@@ -237,9 +238,9 @@ equal to or less than your level, it
 is destroyed. Otherwise, on a fail,
 it flees from you for 5 rounds.
 """
-identity = "core::spells::turn-undead"
+source = "core::spells::turn-undead"
 tier = 1
 caster = "core::class::priest"
 duration = { rounds = 5 }
 range = "core::range::close"
-cast = { requires = "core::class::priest::deity::holy-symbol", check = "sheet::action::roll::check::spellcasting" }
+cast = { requires = "::holy-symbol::", check = "sheet::action::roll::check::spellcasting" }

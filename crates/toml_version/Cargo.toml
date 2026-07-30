@@ -1,0 +1,8 @@
+[package]
+name = "toml_version"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = "1.0.229"
+toml = "1.1.4"
