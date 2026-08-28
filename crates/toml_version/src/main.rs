@@ -1,4 +1,5 @@
-pub mod expression;
+pub mod parseable;
+pub mod path;
 pub mod roll;
 pub mod sheet;
 
@@ -24,5 +25,5 @@ amount = 1"
         // ], d = 6 }"
         .parse::<Table>()
         .unwrap();
-    println!("{}", toml["bonus"]);
+    println!("{:?}", toml["bonus"]["value"]);
 }
